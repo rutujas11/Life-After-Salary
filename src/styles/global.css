@@ -44,6 +44,21 @@ body {
     z-index: 0;
 }
 
+/* FIX ALL LOGIN/SIGNUP BACKGROUND LAYERS SO THEY NEVER COVER OTHER SCREENS */
+.fullscreen-overlay,
+.login-bg-overlay,
+.signup-bg-overlay,
+.onboarding-bg-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: -1 !important;
+    /* stays BELOW everything */
+    pointer-events: none !important;
+    /* never blocks clicks */
+}
+
 .screen {
     position: relative;
     z-index: 1;
@@ -115,6 +130,7 @@ body {
     box-shadow: 0 20px 60px rgba(255, 46, 99, 0.2);
     position: relative;
     overflow: hidden;
+    z-index: 1;
 }
 
 .onboarding-card::before {
@@ -126,6 +142,8 @@ body {
     height: 200%;
     background: radial-gradient(circle, rgba(255, 46, 99, 0.1) 0%, transparent 70%);
     animation: rotate 20s linear infinite;
+    pointer-events: none;
+    z-index: 0; 
 }
 
 @keyframes rotate {
@@ -728,6 +746,14 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .navbar > div:last-child {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }  
+
     .metrics-grid {
         grid-template-columns: 1fr;
     }
@@ -756,6 +782,32 @@ body {
     .logo {
         font-size: 2rem;
     }
+    
+    .navbar {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+        gap: 10px;
+    }
+
+    .nav-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        gap: 18px;
+    }
+
+
+    .nav-lang {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .nav-lang button {
+        flex-shrink: 0; /* Prevents squeezing on mobile */
+    }
+
 }
 
 /* Animations */
@@ -901,3 +953,4 @@ body {
     margin: auto;
     padding: 30px;
 }
+

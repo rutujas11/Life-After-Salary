@@ -8,8 +8,8 @@ import { INITIAL_STATE } from "../data/constants";
 export default function DashboardScreen({
   gameState,
   decisions,
-  onDecision,
-  onNextMonth,
+  onDecide,
+  onNext,
   language
 }) {
   // --- i18n ---
@@ -20,9 +20,12 @@ export default function DashboardScreen({
   const state = gameState && typeof gameState === "object" ? gameState : INITIAL_STATE;
 
   // all decisions chosen?
-  const allDone = decisions && DECISIONS
-    ? Object.keys(decisions).length === DECISIONS.length
-    : false;
+  const allDone =
+    Array.isArray(DECISIONS) &&
+    DECISIONS.length > 0 &&
+    DECISIONS.every(d =>
+      Object.prototype.hasOwnProperty.call(decisions || {}, d.id)
+    );
 
   return (
     <div className="screen dashboard">
@@ -106,19 +109,30 @@ export default function DashboardScreen({
               key={d.id}
               decision={d}
               selected={decisions ? decisions[d.id] : undefined}
-              onSelect={(o) => onDecision(d.id, o)}
-              language={language}   // <-- critical for MR/HI
+              onSelect={(o) => {
+                // guard + track
+                if (typeof onDecide === "function") onDecide(d.id, o);
+                else console.warn("onDecide prop is not a function", onDecide);
+              }}
+              language={language}
             />
           ))}
         </div>
       </div>
 
+
       {/* Next month */}
       <div className="action-buttons">
         <button
-          className="btn-primary"
+          type="button"                 // <-- add this so it never acts like a <form> submit
+          className="btn-primary next-month"  // <-- add class for neon animation
           disabled={!allDone}
-          onClick={onNextMonth}
+          aria-disabled={!allDone}      // <-- better a11y
+          onClick={() => {
+            if (!allDone) return;       // defensive guard
+            if (typeof onNext === "function") onNext();
+            else console.warn("onNext prop is not a function", onNext);
+          }}
         >
           {state.month >= 12 ? tx("Finish Year") : tx("Next Month")} →
         </button>

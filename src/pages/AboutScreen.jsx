@@ -1,7 +1,6 @@
-
 import useTranslate from "../i18n/useTranslate";
 
-export default function AboutScreen({ language, onBack }) {
+export default function AboutScreen({ language, setScreen }) {
   const t = useTranslate(language);
   const tx = t.tx;
 
@@ -33,7 +32,7 @@ export default function AboutScreen({ language, onBack }) {
       </div>
 
       <div className="action-buttons">
-        <button className="btn-secondary" onClick={onBack}>
+        <button className="btn-secondary" onClick={() => setScreen("home")}>
           {tx("← Back to Home")}
         </button>
       </div>
