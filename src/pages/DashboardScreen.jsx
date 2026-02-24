@@ -1,9 +1,10 @@
-
+import { useEffect } from "react";
 import useTranslate from "../i18n/useTranslate";
 import DECISIONS from "../data/decisions";
 import MetricCard from "../components/MetricCard";
 import DecisionCard from "../components/DecisionCard";
 import { INITIAL_STATE } from "../data/constants";
+
 
 export default function DashboardScreen({
   gameState,
@@ -26,6 +27,13 @@ export default function DashboardScreen({
     DECISIONS.every(d =>
       Object.prototype.hasOwnProperty.call(decisions || {}, d.id)
     );
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, [gameState.month]);
 
   return (
     <div className="screen dashboard">

@@ -11,10 +11,8 @@ import LoginScreen from "./pages/LoginScreen";
 import SignupScreen from "./pages/SignupScreen";
 
 import EventModal from "./components/EventModal";
-import { INITIAL_STATE } from "./data/constants";
-import DECISIONS from "./data/decisions";
 import EVENTS from "./data/events";
-import useTranslate from "./i18n/useTranslate";
+import { INITIAL_STATE, SALARY_MAP } from "./data/constants";
 
 export default function App() {
   const [language, setLanguage] = useState("EN");
@@ -83,13 +81,26 @@ export default function App() {
   const [showEvent, setShowEvent] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
+  // useEffect(() => {
+  //   if (screen === "dashboard" && gameState.month <= 12 && Math.random() > 0.7) {
+  //     const randomEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  //     setCurrentEvent(randomEvent);
+  //     setShowEvent(true);
+  //   }
+  // }, [screen, gameState.month]);
+
   useEffect(() => {
-    if (screen === "dashboard" && gameState.month <= 12 && Math.random() > 0.7) {
+    if (
+      screen === "dashboard" &&
+      gameState.month > 1 &&   // ❗ prevents event on first load
+      gameState.month <= 12 &&
+      Math.random() > 0.6      // adjust probability if needed
+    ) {
       const randomEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
       setCurrentEvent(randomEvent);
       setShowEvent(true);
     }
-  }, [screen, gameState.month]);
+  }, [gameState.month, screen]);
 
   // Guard private screens
   useEffect(() => {
@@ -99,15 +110,6 @@ export default function App() {
     }
   }, [auth.isAuthenticated, screen]);
 
-  // const handleDecision = (id, option) => {
-  //   setDecisions({ ...decisions, [id]: option });
-  //   const next = { ...gameState };
-  //   Object.entries(option.impact).forEach(([k, v]) => {
-  //     next[k] = Math.max(0, next[k] + v);
-  //   });
-  //   setGameState(next);
-  // };
-
   const handleDecision = (id, option) => {
     setDecisions(prev => ({
       ...prev,
@@ -115,28 +117,18 @@ export default function App() {
     }));
   };
 
-  
-  // const nextMonth = () => {
-  //   if (gameState.month >= 12) return setScreen("summary");
-  //   setGameState({
-  //     ...gameState,
-  //     month: gameState.month + 1,
-  //     balance: gameState.balance + 50000,
-  //   });
-  //   setDecisions({});
-  // };
-
   const nextMonth = () => {
     if (gameState.month >= 12) {
       setScreen("summary");
       return;
     }
 
+    const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
+
     let updatedState = { ...gameState };
 
-    // 1️⃣ Add salary first
-    const monthlySalary = Number(userProfile.salary) || 50000;
-    updatedState.balance += monthlySalary;
+    // Add salary dynamically
+    updatedState.balance += salaryValue;
 
     // 2️⃣ Apply each selected decision ONCE
     Object.values(decisions).forEach(option => {
@@ -149,6 +141,12 @@ export default function App() {
         );
       });
     });
+
+    // Auto calculate wealth properly
+    updatedState.wealth =
+      (updatedState.balance || 0) +
+      (updatedState.savings || 0) +
+      (updatedState.investments || 0);
 
     // 3️⃣ Increment month
     updatedState.month += 1;
@@ -209,9 +207,19 @@ export default function App() {
       {screen === "onboarding" && (
         <OnboardingScreen
           language={language}
-          userProfile={userProfile}           // <-- REQUIRED
+          userProfile={userProfile}
           setUserProfile={setUserProfile}
-          onComplete={() => setScreen("dashboard")}
+          onComplete={() => {
+            const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
+
+            setGameState({
+              ...INITIAL_STATE,
+              balance: salaryValue,
+              wealth: salaryValue
+            });
+
+            setScreen("dashboard");
+          }}
         />
       )}
       {screen === "dashboard" && (
@@ -237,16 +245,36 @@ export default function App() {
       )}
 
       {showEvent && currentEvent && (
-        <EventModal language={language}
+        <EventModal
+          language={language}
           event={currentEvent}
           onChoose={(option) => {
-            const next = { ...gameState };
-            Object.entries(option.impact).forEach(([k, v]) => {
-              next[k] = Math.max(0, next[k] + v);
+            let updatedState = { ...gameState };
+
+            // Apply impact safely
+            Object.entries(option.impact || {}).forEach(([key, value]) => {
+              updatedState[key] = Math.max(
+                0,
+                (updatedState[key] ?? 0) + value
+              );
             });
-            setHistory([...history, { event: currentEvent, choice: option, month: gameState.month }]);
-            setGameState(next);
+
+            // 🔥 Recalculate wealth properly
+            updatedState.wealth =
+              (updatedState.balance || 0) +
+              (updatedState.savings || 0) +
+              (updatedState.investments || 0);
+
+            // Save to history
+            setHistory(prev => [
+              ...prev,
+              { event: currentEvent, choice: option, month: gameState.month }
+            ]);
+
+            // Update state
+            setGameState(updatedState);
             setShowEvent(false);
+            setCurrentEvent(null);
           }}
         />
       )}

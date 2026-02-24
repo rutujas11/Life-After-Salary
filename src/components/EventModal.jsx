@@ -1,14 +1,14 @@
 import useTranslate from "../i18n/useTranslate";
 import { useState } from "react";
 
-export default function EventModal({ event, onChoice, language }) {
+export default function EventModal({ event, onChoose, language }) {
   const [selected, setSelected] = useState(null);
   const t = useTranslate(language);
   const tx = t.tx;
 
   const choose = (option) => {
     setSelected(option);
-    setTimeout(() => onChoice(option), 1500);
+    setTimeout(() => onChoose(option), 1500);
   };
 
   return (
