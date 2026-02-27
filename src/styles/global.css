@@ -954,3 +954,25 @@ body {
     padding: 30px;
 }
 
+.dynamic-cost {
+  font-size: 0.85rem;
+  margin-top: 6px;
+  color: #08d9d6;
+  opacity: 0.9;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.option-label {
+  font-weight: 600;
+}
+
+.option-amount {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  opacity: 0.85;
+}

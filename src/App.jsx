@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import HomeScreen from "./pages/HomeScreen";
@@ -81,14 +81,6 @@ export default function App() {
   const [showEvent, setShowEvent] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
 
-  // useEffect(() => {
-  //   if (screen === "dashboard" && gameState.month <= 12 && Math.random() > 0.7) {
-  //     const randomEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
-  //     setCurrentEvent(randomEvent);
-  //     setShowEvent(true);
-  //   }
-  // }, [screen, gameState.month]);
-
   useEffect(() => {
     if (
       screen === "dashboard" &&
@@ -127,28 +119,74 @@ export default function App() {
 
     let updatedState = { ...gameState };
 
-    // Add salary dynamically
+    // 1️⃣ Add salary
     updatedState.balance += salaryValue;
 
-    // 2️⃣ Apply each selected decision ONCE
+    // 2️⃣ Apply decisions
     Object.values(decisions).forEach(option => {
-      if (!option?.impact) return;
+      if (!option) return;
 
-      Object.entries(option.impact).forEach(([key, value]) => {
+      let totalCost = 0;
+
+      // 🏠 % based cost (rent etc.)
+      if (option.costPercent) {
+        totalCost += Math.round(salaryValue * option.costPercent);
+      }
+
+      // 🍔 Fixed base cost (food etc.)
+      if (option.baseCost) {
+        totalCost += option.baseCost;
+      }
+
+      // 📊 Lifestyle extra %
+      if (option.extraPercent) {
+        totalCost += Math.round(salaryValue * option.extraPercent);
+      }
+
+      // Deduct total cost
+      if (totalCost > 0) {
+        updatedState.balance = Math.max(
+          0,
+          updatedState.balance - totalCost
+        );
+      }
+
+      // 📈 Apply stress / credit changes
+      Object.entries(option.impact || {}).forEach(([key, value]) => {
         updatedState[key] = Math.max(
           0,
           (updatedState[key] ?? 0) + value
         );
       });
+
+      // 💹 Investment handling
+      if (option.investmentPercent) {
+        const investAmount = Math.round(
+          salaryValue * option.investmentPercent
+        );
+
+        updatedState.investments =
+          (updatedState.investments || 0) + investAmount;
+
+        // 5% growth
+        updatedState.wealth =
+          (updatedState.wealth || 0) +
+          Math.round(investAmount * 1.05);
+      }
     });
 
-    // Auto calculate wealth properly
+    // 3️⃣ Recalculate wealth cleanly
     updatedState.wealth =
       (updatedState.balance || 0) +
       (updatedState.savings || 0) +
       (updatedState.investments || 0);
 
-    // 3️⃣ Increment month
+    // 4️⃣ Bankruptcy warning
+    if (updatedState.balance <= 0) {
+      alert("⚠️ You are bankrupt! Manage wisely.");
+    }
+
+    // 5️⃣ Increment month
     updatedState.month += 1;
 
     setGameState(updatedState);
@@ -230,6 +268,7 @@ export default function App() {
           onDecide={handleDecision}
           onNext={nextMonth}
           onReset={resetGame}
+          salary={SALARY_MAP[userProfile.salary]}
         />
       )}
       {screen === "summary" && (

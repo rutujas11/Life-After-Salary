@@ -11,7 +11,8 @@ export default function DashboardScreen({
   decisions,
   onDecide,
   onNext,
-  language
+  language,
+  salary
 }) {
   // --- i18n ---
   const t = useTranslate(language);
@@ -123,6 +124,7 @@ export default function DashboardScreen({
                 else console.warn("onDecide prop is not a function", onDecide);
               }}
               language={language}
+              salary={salary}
             />
           ))}
         </div>
