@@ -17,6 +17,7 @@ export default function OnboardingScreen({
   userProfile = { city: "", salary: "" },   // fallback prevents crashes
   setUserProfile,
   onComplete,
+  setScreen
 }) {
   const t = useTranslate(language);
   const tx = t.tx;
@@ -121,9 +122,9 @@ export default function OnboardingScreen({
           <button
             type="button"
             className="btn-secondary"
-            onClick={() => window.history.back()}
+            onClick={() => setScreen("home")}
           >
-            {tx("Back")}
+            {tx("<- Back")}
           </button>
         </div>
       </div>

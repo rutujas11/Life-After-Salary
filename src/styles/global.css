@@ -686,6 +686,20 @@ body {
 .badge-icon {
     font-size: 1.5rem;
 }
+.stat-winner {
+    font-size: 12px;
+    margin-top: 6px;
+    color: #00ffae;
+    font-weight: 600;
+}
+
+.comparison-card {
+    transition: transform 0.25s ease;
+}
+
+.comparison-card:hover {
+    transform: translateY(-6px);
+}
 
 /* Language Toggle */
 .lang-toggle {

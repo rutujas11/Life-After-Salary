@@ -194,10 +194,12 @@ export default function App() {
   };
 
   const resetGame = () => {
-    setGameState(INITIAL_STATE);
+    setGameState({ ...INITIAL_STATE });
     setUserProfile({ city: "", salary: "" });
     setHistory([]);
     setDecisions({});
+    setShowEvent(false);
+    setCurrentEvent(null);
     setScreen("home");
   };
 
@@ -221,7 +223,12 @@ export default function App() {
           onAbout={() => setScreen("about")}
         />
       )}
-      {screen === "about" && <AboutScreen onBack={() => setScreen("home")} />}
+      {screen === "about" && (
+        <AboutScreen 
+          language={language}
+          setScreen={setScreen} 
+        />
+      )}
 
       {/* NEW: auth screens */}
       {screen === "login" && (
@@ -247,6 +254,7 @@ export default function App() {
           language={language}
           userProfile={userProfile}
           setUserProfile={setUserProfile}
+          setScreen={setScreen}
           onComplete={() => {
             const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
 
@@ -260,6 +268,7 @@ export default function App() {
           }}
         />
       )}
+      
       {screen === "dashboard" && (
         <DashboardScreen
           language={language}
@@ -276,10 +285,8 @@ export default function App() {
           language={language}
           gameState={gameState}
           history={history}
-          onRestart={() => {
-            resetGame();
-            setScreen("home");
-          }}
+          onReset={resetGame}
+          salary={SALARY_MAP[userProfile.salary]}
         />
       )}
 
