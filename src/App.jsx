@@ -39,36 +39,33 @@ export default function App() {
   const handleSignup = (name, email, password) => {
     const user = { name, email };
     localStorage.setItem("las_user", JSON.stringify(user));
-    localStorage.setItem("las_credentials", JSON.stringify({ email, password }));
     localStorage.setItem("las_session", "1");
     setAuth({ isAuthenticated: true, user });
     setScreen("home"); // start flow
   };
 
-  const handleLogin = (email, password) => {
-    const credsRaw = localStorage.getItem("las_credentials");
-    if (!credsRaw) {
+  const handleLogin = (email) => {
+    const userRaw = localStorage.getItem("las_user");
+
+    if (!userRaw) {
       alert("No account found. Please sign up.");
       setScreen("signup");
       return;
     }
-    try {
-      const creds = JSON.parse(credsRaw);
-      if (creds.email === email && creds.password === password) {
-        const user = JSON.parse(localStorage.getItem("las_user") || "{}");
-        localStorage.setItem("las_session", "1");
-        setAuth({ isAuthenticated: true, user });
-        setScreen("home");
-      } else {
-        alert("Invalid email or password");
-      }
-    } catch {
-      alert("Invalid email or password");
+
+    const user = JSON.parse(userRaw);
+
+    if (user.email === email) {
+      localStorage.setItem("las_session", "1");
+      setAuth({ isAuthenticated: true, user });
+      setScreen("home");
+    } else {
+      alert("User not found. Please sign up.");
     }
   };
 
   const handleLogout = () => {
-    localStorage.setItem("las_session", "0");
+    localStorage.removeItem("las_session");
     setAuth({ isAuthenticated: false, user: null });
     setScreen("home");
   };

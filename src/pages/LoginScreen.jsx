@@ -16,7 +16,7 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
       setErr(tx("Please fill all fields"));
       return;
     }
-    onLogin(email.trim(), password);
+    onLogin(email.trim());
   };
 
   return (
