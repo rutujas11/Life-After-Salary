@@ -12,7 +12,8 @@ export default function DashboardScreen({
   onDecide,
   onNext,
   language,
-  salary
+  salary,
+  city
 }) {
   // --- i18n ---
   const t = useTranslate(language);
@@ -125,6 +126,7 @@ export default function DashboardScreen({
               }}
               language={language}
               salary={salary}
+              city={city}  
             />
           ))}
         </div>

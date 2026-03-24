@@ -7,3 +7,6 @@
   
 
 
+a. Apply SAME city logic inside nextMonth() (important for correctness)
+b. Add “Move City” event mid-game (super cool feature)
+c. add go back option on game screen to city and salary selection change

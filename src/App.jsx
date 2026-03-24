@@ -275,6 +275,7 @@ export default function App() {
           onNext={nextMonth}
           onReset={resetGame}
           salary={SALARY_MAP[userProfile.salary]}
+          city={userProfile.city}
         />
       )}
       {screen === "summary" && (
