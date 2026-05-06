@@ -36,7 +36,7 @@ export default function App() {
     }
   }, []);
 
-  const handleSignup = (name, email, password) => {
+  const handleSignup = (name, email) => {
     const user = { name, email };
     localStorage.setItem("las_user", JSON.stringify(user));
     localStorage.setItem("las_session", "1");
@@ -73,6 +73,8 @@ export default function App() {
 
   const [gameState, setGameState] = useState(INITIAL_STATE);
   const [userProfile, setUserProfile] = useState({ city: "", salary: "" });
+  const [currentSalary, setCurrentSalary] = useState(0);
+  const [currentCity, setCurrentCity] = useState("");
   const [decisions, setDecisions] = useState({});
   const [history, setHistory] = useState([]);
   const [showEvent, setShowEvent] = useState(false);
@@ -112,7 +114,7 @@ export default function App() {
       return;
     }
 
-    const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
+    const salaryValue = currentSalary || 50000;
 
     let updatedState = { ...gameState };
 
@@ -255,6 +257,9 @@ export default function App() {
           onComplete={() => {
             const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
 
+            setCurrentSalary(salaryValue);
+            setCurrentCity(userProfile.city);
+
             setGameState({
               ...INITIAL_STATE,
               balance: salaryValue,
@@ -274,8 +279,10 @@ export default function App() {
           onDecide={handleDecision}
           onNext={nextMonth}
           onReset={resetGame}
-          salary={SALARY_MAP[userProfile.salary]}
-          city={userProfile.city}
+          salary={currentSalary}
+          city={currentCity}
+          setCurrentSalary={setCurrentSalary}
+          setCurrentCity={setCurrentCity}
         />
       )}
       {screen === "summary" && (

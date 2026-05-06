@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useState } from "react";
 import useTranslate from "../i18n/useTranslate";
 import DECISIONS from "../data/decisions";
 import MetricCard from "../components/MetricCard";
@@ -13,7 +14,9 @@ export default function DashboardScreen({
   onNext,
   language,
   salary,
-  city
+  city,
+  setCurrentSalary,
+  setCurrentCity
 }) {
   // --- i18n ---
   const t = useTranslate(language);
@@ -30,6 +33,17 @@ export default function DashboardScreen({
       Object.prototype.hasOwnProperty.call(decisions || {}, d.id)
     );
 
+  const [shuffledDecisions, setShuffledDecisions] = useState([]);
+
+  useEffect(() => {
+    const shuffled = DECISIONS.map((decision) => ({
+      ...decision,
+      options: [...decision.options].sort(() => Math.random() - 0.5),
+    }));
+
+    setShuffledDecisions(shuffled);
+  }, [salary, city]); 
+
   useEffect(() => {
     document.documentElement.scrollTo({
       top: 0,
@@ -37,8 +51,38 @@ export default function DashboardScreen({
     });
   }, [gameState.month]);
 
+  
+
   return (
     <div className="screen dashboard">
+      <div style={{ marginBottom: "10px", opacity: 0.8 }}>
+        💼 Salary: ₹{salary?.toLocaleString()} | 🏙️ {city || "Not Set"}
+      </div>
+
+      {/* ✅ BUTTONS */}
+      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+        <button
+          className="btn-secondary"
+          onClick={() => {
+            const newSalary = Math.round((salary || 50000) * 1.3);
+            setCurrentSalary(newSalary);
+            alert("🎉 Salary Increased!");
+          }}
+        >
+          💰 Increase Salary
+        </button>
+
+        <button
+          className="btn-secondary"
+          onClick={() => {
+            setCurrentCity("Mumbai");
+            alert("🏙️ Moved to Mumbai!");
+          }}
+        >
+          🏙️ Change City
+        </button>
+      </div>
+
       {/* Month header */}
       <div className="month-header">
         <h2 className="month-title">
@@ -114,7 +158,7 @@ export default function DashboardScreen({
         <h3 className="section-title">{tx("Make Your Monthly Decisions")}</h3>
 
         <div className="decision-cards">
-          {DECISIONS.map((d) => (
+          {shuffledDecisions.map((d) => (
             <DecisionCard
               key={d.id}
               decision={d}
