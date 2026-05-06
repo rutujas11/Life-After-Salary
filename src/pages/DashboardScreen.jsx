@@ -64,9 +64,19 @@ export default function DashboardScreen({
         <button
           className="btn-secondary"
           onClick={() => {
-            const newSalary = Math.round((salary || 50000) * 1.3);
+            const input = prompt("Enter your new monthly salary (₹):");
+
+            if (!input) return;
+
+            const newSalary = parseInt(input);
+
+            if (isNaN(newSalary) || newSalary <= 0) {
+              alert("Invalid salary");
+              return;
+            }
+
             setCurrentSalary(newSalary);
-            alert("🎉 Salary Increased!");
+            alert(`🎉 Salary updated to ₹${newSalary}`);
           }}
         >
           💰 Increase Salary
@@ -75,8 +85,17 @@ export default function DashboardScreen({
         <button
           className="btn-secondary"
           onClick={() => {
-            setCurrentCity("Mumbai");
-            alert("🏙️ Moved to Mumbai!");
+            const cities = ["Mumbai", "Pune", "Bangalore", "Delhi"];
+
+            const newCity = prompt(`Choose city:\n${cities.join(", ")}`);
+
+            if (!newCity || !cities.includes(newCity)) {
+              alert("Invalid city");
+              return;
+            }
+
+            setCurrentCity(newCity);
+            alert(`🏙️ Moved to ${newCity}`);;
           }}
         >
           🏙️ Change City
@@ -180,12 +199,12 @@ export default function DashboardScreen({
       {/* Next month */}
       <div className="action-buttons">
         <button
-          type="button"                 // <-- add this so it never acts like a <form> submit
-          className="btn-primary next-month"  // <-- add class for neon animation
+          type="button"                 
+          className="btn-primary next-month" 
           disabled={!allDone}
-          aria-disabled={!allDone}      // <-- better a11y
+          aria-disabled={!allDone}     
           onClick={() => {
-            if (!allDone) return;       // defensive guard
+            if (!allDone) return;       
             if (typeof onNext === "function") onNext();
             else console.warn("onNext prop is not a function", onNext);
           }}
