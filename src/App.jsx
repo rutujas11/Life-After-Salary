@@ -12,7 +12,9 @@ import SignupScreen from "./pages/SignupScreen";
 
 import EventModal from "./components/EventModal";
 import EVENTS from "./data/events";
-import { INITIAL_STATE, SALARY_MAP } from "./data/constants";
+import { INITIAL_STATE } from "./data/constants";
+
+import { calculateOptionCost } from "./utils/calculateCost";
 
 export default function App() {
   const [language, setLanguage] = useState("EN");
@@ -72,7 +74,7 @@ export default function App() {
   // === END demo auth ===
 
   const [gameState, setGameState] = useState(INITIAL_STATE);
-  const [userProfile, setUserProfile] = useState({ city: "", salary: "" });
+  const [userProfile, setUserProfile] = useState({ city: "" });
   const [currentSalary, setCurrentSalary] = useState(0);
   const [currentCity, setCurrentCity] = useState("");
   const [decisions, setDecisions] = useState({});
@@ -127,20 +129,18 @@ export default function App() {
 
       let totalCost = 0;
 
-      // 🏠 % based cost (rent etc.)
-      if (option.costPercent) {
-        totalCost += Math.round(salaryValue * option.costPercent);
-      }
+      const decisionId = Object.keys(decisions).find(
+        key => decisions[key] === option
+      );
 
-      // 🍔 Fixed base cost (food etc.)
-      if (option.baseCost) {
-        totalCost += option.baseCost;
-      }
+      totalCost = calculateOptionCost(
+        option,
+        decisionId,
+        salaryValue,
+        currentCity
+      );
 
-      // 📊 Lifestyle extra %
-      if (option.extraPercent) {
-        totalCost += Math.round(salaryValue * option.extraPercent);
-      }
+      totalCost = Math.round(totalCost);
 
       // Deduct total cost
       if (totalCost > 0) {
@@ -254,8 +254,11 @@ export default function App() {
           userProfile={userProfile}
           setUserProfile={setUserProfile}
           setScreen={setScreen}
+          currentSalary={currentSalary}          // ✅ ADD
+          setCurrentSalary={setCurrentSalary}    // ✅ ADD
+              
           onComplete={() => {
-            const salaryValue = SALARY_MAP[userProfile.salary] || 50000;
+            const salaryValue = currentSalary || 50000;
 
             setCurrentSalary(salaryValue);
             setCurrentCity(userProfile.city);
@@ -279,8 +282,8 @@ export default function App() {
           onDecide={handleDecision}
           onNext={nextMonth}
           onReset={resetGame}
-          salary={currentSalary}
-          city={currentCity}
+          currentSalary={currentSalary}
+          currentCity={currentCity}
           setCurrentSalary={setCurrentSalary}
           setCurrentCity={setCurrentCity}
         />
@@ -291,7 +294,7 @@ export default function App() {
           gameState={gameState}
           history={history}
           onReset={resetGame}
-          salary={SALARY_MAP[userProfile.salary]}
+          salary={currentSalary}
         />
       )}
 

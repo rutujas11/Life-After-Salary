@@ -1,14 +1,12 @@
 import useTranslate from "../i18n/useTranslate";
 import { CITY_CONFIG } from "../data/cityConfig";
+import { calculateOptionCost } from "../utils/calculateCost";
 export default function DecisionCard({ decision, selected, onSelect, language, salary, city }) {
   
   const t = useTranslate(language);
   const tx = t.tx;
 
-  const shuffledOptions = [...decision.options].sort(
-    () => Math.random() - 0.5
-  );
-  
+
   return (
     <div className="decision-card">
       <div className="decision-title">
@@ -17,37 +15,15 @@ export default function DecisionCard({ decision, selected, onSelect, language, s
       </div>
 
       <div className="decision-options">
-        {shuffledOptions.map((option, index) => {
+        {decision.options.map((option, index) => {
           const cityData = CITY_CONFIG[city] || {};
           
-          const cost = (() => {
-            if (!salary) return 0;
-
-            let total = 0;
-
-            if (option.baseCost) {
-              total += option.baseCost;
-            }
-
-            if (option.extraPercent) {
-              total += Math.round(salary * option.extraPercent);
-            }
-
-            if (option.costPercent) {
-              total += Math.round(salary * option.costPercent);
-            }
-
-            if (decision.id === "rent") {
-              total *= cityData.rentMultiplier || 1;
-            }
-
-            if (decision.id === "food") {
-              total *= cityData.foodMultiplier || 1;
-            }
-
-            return Math.round(total);
-          })();
-
+          const cost = calculateOptionCost(
+            option,
+            decision.id,
+            salary,
+            city
+          );
           return (
             <div key={index}>
               <button

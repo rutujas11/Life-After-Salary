@@ -17,7 +17,9 @@ export default function OnboardingScreen({
   userProfile = { city: "", salary: "" },   // fallback prevents crashes
   setUserProfile,
   onComplete,
-  setScreen
+  setScreen,
+  currentSalary,
+  setCurrentSalary
 }) {
   const t = useTranslate(language);
   const tx = t.tx;
@@ -25,8 +27,8 @@ export default function OnboardingScreen({
   const handleStart = (e) => {
     e.preventDefault(); // if wrapped in a <form>, prevent full-page submit
     // Basic validation
-    if (!userProfile?.city || !userProfile?.salary) {
-      alert(tx("Please select your city and salary range"));
+    if (!userProfile?.city || !currentSalary) {
+      alert(tx("Please select your city and enter salary"));
       return;
     }
     // Advance to dashboard
@@ -89,23 +91,21 @@ export default function OnboardingScreen({
 
         {/* SALARY */}
         <div className="form-group">
-          <label className="form-label">{tx("Select your salary range")}</label>
-          <div className="select-grid">
-            {["< ₹25k", "₹25k–₹50k", "₹50k–₹1L", "₹1L+"].map((s) => (
-              <div
-                key={s}
-                className={
-                  "select-option" + (userProfile.salary === s ? " selected" : "")
-                }
-                onClick={() => setUserProfile((p) => ({ ...p, salary: s }))}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && setUserProfile((p) => ({ ...p, salary: s }))}
-              >
-                <h4>{s}</h4>
-              </div>
-            ))}
-          </div>
+          <label className="form-label">{tx("Enter your monthly salary")}</label>
+
+          <input
+            type="number"
+            className="salary-input"
+            placeholder="e.g. 40000"
+            value={currentSalary || ""}
+            min="10000"
+            max="500000"
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              if (value < 0) return; // prevent negative
+              setCurrentSalary(value);
+            }}
+          />
         </div>
 
         {/* ACTIONS */}
@@ -114,7 +114,7 @@ export default function OnboardingScreen({
             type="button"          // avoid accidental form submit
             className="btn-primary"
             onClick={handleStart}
-            disabled={!userProfile.city || !userProfile.salary}
+            disabled={!userProfile.city || !currentSalary}
           >
             {tx("Start Journey")}
           </button>

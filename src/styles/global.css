@@ -248,6 +248,32 @@ body {
     cursor: not-allowed;
 }
 
+
+/* Salary */
+.salary-input {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 2px solid rgba(8,217,214,0.3);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.salary-input:focus {
+  border-color: #08d9d6;
+  box-shadow: 0 0 10px rgba(8,217,214,0.5);
+}
+
+.salary-label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  display: block;
+}
+
+
 /* Dashboard */
 .dashboard {
     padding: 20px 0;

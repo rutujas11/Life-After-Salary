@@ -13,8 +13,8 @@ export default function DashboardScreen({
   onDecide,
   onNext,
   language,
-  salary,
-  city,
+  currentSalary,
+  currentCity,
   setCurrentSalary,
   setCurrentCity
 }) {
@@ -33,16 +33,12 @@ export default function DashboardScreen({
       Object.prototype.hasOwnProperty.call(decisions || {}, d.id)
     );
 
-  const [shuffledDecisions, setShuffledDecisions] = useState([]);
-
-  useEffect(() => {
-    const shuffled = DECISIONS.map((decision) => ({
+  const [shuffledDecisions] = useState(() => {
+    return DECISIONS.map((decision) => ({
       ...decision,
       options: [...decision.options].sort(() => Math.random() - 0.5),
     }));
-
-    setShuffledDecisions(shuffled);
-  }, [salary, city]); 
+  });
 
   useEffect(() => {
     document.documentElement.scrollTo({
@@ -56,7 +52,7 @@ export default function DashboardScreen({
   return (
     <div className="screen dashboard">
       <div style={{ marginBottom: "10px", opacity: 0.8 }}>
-        💼 Salary: ₹{salary?.toLocaleString()} | 🏙️ {city || "Not Set"}
+        💼 Salary: ₹{currentSalary?.toLocaleString()} | 🏙️ {currentCity || "Not Set"}
       </div>
 
       {/* ✅ BUTTONS */}
@@ -85,9 +81,11 @@ export default function DashboardScreen({
         <button
           className="btn-secondary"
           onClick={() => {
-            const cities = ["Mumbai", "Pune", "Bangalore", "Delhi"];
+            const cities = ["Mumbai", "Pune", "Bengaluru", "Delhi", "Hyderabad"];
 
-            const newCity = prompt(`Choose city:\n${cities.join(", ")}`);
+            const newCity = prompt(
+              "Enter new city:\nMumbai\nPune\nHyderabad\nDelhi\nBengaluru"
+            );
 
             if (!newCity || !cities.includes(newCity)) {
               alert("Invalid city");
@@ -188,8 +186,8 @@ export default function DashboardScreen({
                 else console.warn("onDecide prop is not a function", onDecide);
               }}
               language={language}
-              salary={salary}
-              city={city}  
+              salary={currentSalary}
+              city={currentCity}  
             />
           ))}
         </div>

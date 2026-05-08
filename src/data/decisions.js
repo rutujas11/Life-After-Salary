@@ -6,21 +6,38 @@ export default [
     options: [
       {
         label: "Shared Apartment",
-        costPercent: 0.25, // 25% of salary
-        impact: { stress: -5, creditScore: 2 },
-        tags: ["💰 Budget-Friendly", "😌 Less Stress"],
+        impact: {
+          stress: 8,
+          creditScore: 5,
+        },
+        tags: [
+          "💰 Cheapest Option",
+          "👥 Roommates",
+        ],
       },
+
       {
-        label: "1BHK",
-        costPercent: 0.45,
-        impact: { stress: 5, creditScore: 0 },
-        tags: ["🏡 Comfort", "💸 Moderate Cost"],
+        label: "PG Accommodation",
+        impact: {
+          stress: 2,
+          creditScore: 2,
+        },
+        tags: [
+          "🍽️ Food Included",
+          "⚖️ Balanced",
+        ],
       },
+
       {
-        label: "Luxury 2BHK",
-        costPercent: 0.75,
-        impact: { stress: 15, creditScore: -5 },
-        tags: ["⚠️ Expensive", "😰 High Stress"],
+        label: "1/2 BHK Flat",
+        impact: {
+          stress: -5,
+          creditScore: -3,
+        },
+        tags: [
+          "🏡 Comfortable",
+          "💸 Expensive",
+        ],
       },
     ],
   },
