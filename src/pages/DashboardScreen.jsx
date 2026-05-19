@@ -4,6 +4,7 @@ import useTranslate from "../i18n/useTranslate";
 import DECISIONS from "../data/decisions";
 import MetricCard from "../components/MetricCard";
 import DecisionCard from "../components/DecisionCard";
+import { CITY_CONFIG } from "../data/cityConfig";
 import { INITIAL_STATE } from "../data/constants";
 
 
@@ -58,13 +59,80 @@ export default function DashboardScreen({
     });
   }, [gameState.month]);
 
+  const totalMonthlyExpenses = Object.entries(decisions || {}).reduce(
+    (sum, [decisionId, option]) => {
+
+      if (!option) return sum;
+
+      let cost = 0;
+
+      const cityData =
+        CITY_CONFIG[currentCity] || CITY_CONFIG.Pune;
+
+      // RENT
+      if (decisionId === "rent") {
+
+        if (option.label === "Shared Apartment") {
+          const [min, max] = cityData.rent.shared;
+          cost = Math.round((min + max) / 2);
+        }
+
+        else if (option.label === "PG Accommodation") {
+          const [min, max] = cityData.rent.pg;
+          cost = Math.round((min + max) / 2);
+        }
+
+        else if (option.label === "1/2 BHK Flat") {
+          const [min, max] = cityData.rent.flat;
+          cost = Math.round((min + max) / 2);
+        }
+      }
+
+      // FOOD
+      else if (decisionId === "food") {
+
+        cost +=
+          (option.baseCost || 0) *
+          (cityData.foodMultiplier || 1);
+
+        if (option.extraPercent) {
+          cost += Math.round(
+            currentSalary * option.extraPercent
+          );
+        }
+      }
+
+      // OTHER
+      else {
+
+        if (option.baseCost) {
+          cost += option.baseCost;
+        }
+
+        if (option.extraPercent) {
+          cost += Math.round(
+            currentSalary * option.extraPercent
+          );
+        }
+
+        if (option.costPercent) {
+          cost += Math.round(
+            currentSalary * option.costPercent
+          );
+        }
+      }
+
+      return sum + Math.round(cost);
+
+    }, 0
+  );
+
+  const remainingSalary =
+    (currentSalary || 0) - totalMonthlyExpenses;
 
   return (
     <div className="screen dashboard">
-      <div style={{ marginBottom: "10px", opacity: 0.8 }}>
-        💼 Salary: ₹{Number(currentSalary || 0).toLocaleString()} | 🏙️ {currentCity || "Not Set"}
-      </div>
-
+      
       {/* ✅ BUTTONS */}
       <div
         style={{
@@ -127,7 +195,7 @@ export default function DashboardScreen({
                       prev.wealth +
                       (tempSalary - currentSalary),
                   }));
-                  
+
                   setShowSalaryModal(false);
                 }}
               >
@@ -278,6 +346,45 @@ export default function DashboardScreen({
             />
           ))}
         </div>
+      </div>
+
+      {/* Live Budget Tracker */}
+      <div style={{ marginBottom: "10px", opacity: 0.8 }}>
+        💼 Salary: ₹{Number(currentSalary || 0).toLocaleString()} | 🏙️ {currentCity || "Not Set"}
+      </div>
+
+      <div
+        style={{
+          marginBottom: "18px",
+          padding: "14px",
+          borderRadius: "16px",
+
+          background:
+            remainingSalary >= 0
+              ? "rgba(0,255,140,0.12)"
+              : "rgba(255,0,80,0.12)",
+
+          border:
+            remainingSalary >= 0
+              ? "1px solid rgba(0,255,140,0.35)"
+              : "1px solid rgba(255,0,80,0.35)",
+
+          color:
+            remainingSalary >= 0
+              ? "#00ff95"
+              : "#ff4d6d",
+
+          fontWeight: 700,
+          fontSize: "18px",
+        }}
+      >
+        💸 Monthly Expenses:
+        ₹{totalMonthlyExpenses.toLocaleString()}
+
+        <br />
+
+        💰 Remaining:
+        ₹{remainingSalary.toLocaleString()}
       </div>
 
 
