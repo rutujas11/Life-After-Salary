@@ -16,7 +16,8 @@ export default function DashboardScreen({
   currentSalary,
   currentCity,
   setCurrentSalary,
-  setCurrentCity
+  setCurrentCity,
+  setGameState
 }) {
   // --- i18n ---
   const t = useTranslate(language);
@@ -40,6 +41,16 @@ export default function DashboardScreen({
     }));
   });
 
+  const [showSalaryModal, setShowSalaryModal] = useState(false);
+  const [showCityModal, setShowCityModal] = useState(false);
+
+  const [tempSalary, setTempSalary] = useState(currentSalary || 0);
+  useEffect(() => {
+    setTempSalary(currentSalary || 0);
+  }, [currentSalary]);
+
+  const [tempCity, setTempCity] = useState(currentCity);
+
   useEffect(() => {
     document.documentElement.scrollTo({
       top: 0,
@@ -47,58 +58,134 @@ export default function DashboardScreen({
     });
   }, [gameState.month]);
 
-  
 
   return (
     <div className="screen dashboard">
       <div style={{ marginBottom: "10px", opacity: 0.8 }}>
-        💼 Salary: ₹{currentSalary?.toLocaleString()} | 🏙️ {currentCity || "Not Set"}
+        💼 Salary: ₹{Number(currentSalary || 0).toLocaleString()} | 🏙️ {currentCity || "Not Set"}
       </div>
 
       {/* ✅ BUTTONS */}
-      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+      <div
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
         <button
           className="btn-secondary"
           onClick={() => {
-            const input = prompt("Enter your new monthly salary (₹):");
-
-            if (!input) return;
-
-            const newSalary = parseInt(input);
-
-            if (isNaN(newSalary) || newSalary <= 0) {
-              alert("Invalid salary");
-              return;
-            }
-
-            setCurrentSalary(newSalary);
-            alert(`🎉 Salary updated to ₹${newSalary}`);
+            setTempSalary(currentSalary);
+            setShowSalaryModal(true);
           }}
         >
-          💰 Increase Salary
+          💰 Update Salary
         </button>
 
         <button
           className="btn-secondary"
           onClick={() => {
-            const cities = ["Mumbai", "Pune", "Bengaluru", "Delhi", "Hyderabad"];
-
-            const newCity = prompt(
-              "Enter new city:\nMumbai\nPune\nHyderabad\nDelhi\nBengaluru"
-            );
-
-            if (!newCity || !cities.includes(newCity)) {
-              alert("Invalid city");
-              return;
-            }
-
-            setCurrentCity(newCity);
-            alert(`🏙️ Moved to ${newCity}`);;
+            setTempCity(currentCity);
+            setShowCityModal(true);
           }}
         >
           🏙️ Change City
         </button>
       </div>
+
+
+      {showSalaryModal && (
+        <div className="custom-modal-overlay">
+          <div className="custom-modal">
+            <h3>💰 Update Monthly Salary</h3>
+
+            <input
+              type="number"
+              className="salary-input"
+              value={tempSalary}
+              onChange={(e) => setTempSalary(Number(e.target.value))}
+              placeholder="Enter salary"
+            />
+
+            <div className="modal-actions">
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  if (!tempSalary || tempSalary <= 0) return;
+
+                  setCurrentSalary(Number(tempSalary));
+
+                  setGameState((prev) => ({
+                    ...prev,
+                    balance:
+                      prev.balance +
+                      (tempSalary - currentSalary),
+
+                    wealth:
+                      prev.wealth +
+                      (tempSalary - currentSalary),
+                  }));
+                  
+                  setShowSalaryModal(false);
+                }}
+              >
+                Save
+              </button>
+
+              <button
+                className="btn-secondary"
+                onClick={() => setShowSalaryModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCityModal && (
+        <div className="custom-modal-overlay">
+          <div className="custom-modal">
+            <h3>🏙️ Change City</h3>
+
+            <select
+              className="salary-input"
+              value={tempCity}
+              onChange={(e) => setTempCity(e.target.value)}
+            >
+              <option value="">Select City</option>
+              <option value="Mumbai">🌆 Mumbai</option>
+              <option value="Pune">🏙️ Pune</option>
+              <option value="Delhi">🏛️ Delhi</option>
+              <option value="Bengaluru">🌉 Bengaluru</option>
+              <option value="Hyderabad">🕌 Hyderabad</option>
+            </select>
+
+            <div className="modal-actions">
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  if (!tempCity) return;
+
+                  setCurrentCity(tempCity);
+                  setShowCityModal(false);
+                }}
+              >
+                Save
+              </button>
+
+              <button
+                className="btn-secondary"
+                onClick={() => setShowCityModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Month header */}
       <div className="month-header">
@@ -125,8 +212,8 @@ export default function DashboardScreen({
             (state.creditScore ?? 0) > 700
               ? "var(--success)"
               : (state.creditScore ?? 0) > 600
-              ? "var(--warning)"
-              : "var(--danger)"
+                ? "var(--warning)"
+                : "var(--danger)"
           }
           barPercent={((state.creditScore ?? 0) / 900) * 100}
         />
@@ -147,8 +234,8 @@ export default function DashboardScreen({
             (state.stress ?? 0) < 30
               ? "var(--success)"
               : (state.stress ?? 0) < 60
-              ? "var(--warning)"
-              : "var(--danger)"
+                ? "var(--warning)"
+                : "var(--danger)"
           }
           barPercent={state.stress ?? 0}
           barGradient="linear-gradient(90deg, var(--success), var(--danger))"
@@ -162,8 +249,8 @@ export default function DashboardScreen({
             (state.scamRisk ?? 0) < 30
               ? "var(--success)"
               : (state.scamRisk ?? 0) < 60
-              ? "var(--warning)"
-              : "var(--danger)"
+                ? "var(--warning)"
+                : "var(--danger)"
           }
           barPercent={state.scamRisk ?? 0}
           barGradient="linear-gradient(90deg, var(--success), var(--danger))"
@@ -187,7 +274,7 @@ export default function DashboardScreen({
               }}
               language={language}
               salary={currentSalary}
-              city={currentCity}  
+              city={currentCity}
             />
           ))}
         </div>
@@ -197,12 +284,12 @@ export default function DashboardScreen({
       {/* Next month */}
       <div className="action-buttons">
         <button
-          type="button"                 
-          className="btn-primary next-month" 
+          type="button"
+          className="btn-primary next-month"
           disabled={!allDone}
-          aria-disabled={!allDone}     
+          aria-disabled={!allDone}
           onClick={() => {
-            if (!allDone) return;       
+            if (!allDone) return;
             if (typeof onNext === "function") onNext();
             else console.warn("onNext prop is not a function", onNext);
           }}

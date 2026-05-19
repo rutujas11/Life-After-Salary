@@ -1,5 +1,4 @@
 import useTranslate from "../i18n/useTranslate";
-import { CITY_CONFIG } from "../data/cityConfig";
 import { calculateOptionCost } from "../utils/calculateCost";
 export default function DecisionCard({ decision, selected, onSelect, language, salary, city }) {
   
@@ -16,7 +15,6 @@ export default function DecisionCard({ decision, selected, onSelect, language, s
 
       <div className="decision-options">
         {decision.options.map((option, index) => {
-          const cityData = CITY_CONFIG[city] || {};
           
           const cost = calculateOptionCost(
             option,

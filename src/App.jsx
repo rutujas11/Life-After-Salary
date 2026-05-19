@@ -124,6 +124,7 @@ export default function App() {
     updatedState.balance += salaryValue;
 
     // 2️⃣ Apply decisions
+    let monthlyExpenses = 0;
     Object.values(decisions).forEach(option => {
       if (!option) return;
 
@@ -140,14 +141,18 @@ export default function App() {
         currentCity
       );
 
+      monthlyExpenses += totalCost;
       totalCost = Math.round(totalCost);
+
+      if (totalCost > updatedState.balance) {
+        alert(
+          `⚠️ Insufficient balance.\nYou need ₹${totalCost.toLocaleString()} but only have ₹${updatedState.balance.toLocaleString()}`
+        );
+      }
 
       // Deduct total cost
       if (totalCost > 0) {
-        updatedState.balance = Math.max(
-          0,
-          updatedState.balance - totalCost
-        );
+        updatedState.balance -= totalCost;
       }
 
       // 📈 Apply stress / credit changes
@@ -173,6 +178,14 @@ export default function App() {
           Math.round(investAmount * 1.05);
       }
     });
+
+    if (monthlyExpenses > updatedState.balance) {
+      alert(
+        "⚠️ You cannot proceed.\nYour monthly expenses exceed your balance."
+      );
+
+      return;
+    }
 
     // 3️⃣ Recalculate wealth cleanly
     updatedState.wealth =
@@ -286,6 +299,7 @@ export default function App() {
           currentCity={currentCity}
           setCurrentSalary={setCurrentSalary}
           setCurrentCity={setCurrentCity}
+          setGameState={setGameState}
         />
       )}
       {screen === "summary" && (
