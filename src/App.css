@@ -1,8 +1,10 @@
 #root {
-  max-width: 1280px;
+  width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -92,4 +94,51 @@
   display: flex;
   gap: 10px;
   margin-top: 20px;
+}
+
+
+@media (max-width: 768px) {
+
+  #root {
+    padding: 12px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .decision-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .decision-card {
+    padding: 16px !important;
+  }
+
+  .option-btn {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .month-title {
+    font-size: 24px !important;
+  }
+
+  .custom-modal {
+    width: 95%;
+    padding: 18px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+
+  .salary-input {
+    font-size: 16px;
+  }
 }
