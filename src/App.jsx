@@ -24,6 +24,7 @@ import EVENTS from "./data/events";
 import { INITIAL_STATE } from "./data/constants";
 
 import { calculateOptionCost } from "./utils/calculateCost";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function App() {
   const [screen, setScreen] = useState("home");
@@ -225,12 +226,6 @@ export default function App() {
       monthlyExpenses += totalCost;
       totalCost = Math.round(totalCost);
 
-      if (totalCost > updatedState.balance) {
-        alert(
-          `⚠️ Insufficient balance.\nYou need ₹${totalCost.toLocaleString()} but only have ₹${updatedState.balance.toLocaleString()}`
-        );
-      }
-
       // Deduct total cost
       if (totalCost > 0) {
         updatedState.balance -= totalCost;
@@ -260,14 +255,6 @@ export default function App() {
       }
     });
 
-    if (monthlyExpenses > updatedState.balance) {
-      alert(
-        "⚠️ You cannot proceed.\nYour monthly expenses exceed your balance."
-      );
-
-      return;
-    }
-
     // 3️⃣ Recalculate wealth cleanly
     updatedState.wealth =
       (updatedState.balance || 0) +
@@ -276,7 +263,7 @@ export default function App() {
 
     // 4️⃣ Bankruptcy warning
     if (updatedState.balance <= 0) {
-      alert("⚠️ You are bankrupt! Manage wisely.");
+      toast.success("⚠️ You are bankrupt! Manage wisely.");
     }
 
     // 5️⃣ Increment month
@@ -417,6 +404,20 @@ export default function App() {
           }}
         />
       )}
+
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #08d9d6",
+            borderRadius: "12px",
+            padding: "14px",
+          },
+        }}
+      />
     </>
   );
 }

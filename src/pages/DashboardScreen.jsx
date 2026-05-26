@@ -5,6 +5,8 @@ import MetricCard from "../components/MetricCard";
 import DecisionCard from "../components/DecisionCard";
 import { CITY_CONFIG } from "../data/cityConfig";
 import { INITIAL_STATE } from "../data/constants";
+import { toast } from "react-hot-toast";
+import { calculateOptionCost } from "../utils/calculateCost";
 
 
 export default function DashboardScreen({
@@ -125,6 +127,21 @@ export default function DashboardScreen({
   const remainingSalary =
     (currentSalary || 0) - totalMonthlyExpenses;
 
+  const isOverspending = remainingSalary < 0;
+
+  useEffect(() => {
+     if (isOverspending) {
+      toast.error(
+        "⚠️ Expenses exceeded current balance!",
+        {
+          id: "overspending",
+          duration: 6000,
+        }
+      );
+    }
+  }, [isOverspending]);
+  
+
   return (
     <div className="screen dashboard">
       
@@ -178,7 +195,7 @@ export default function DashboardScreen({
                 onClick={() => {
 
                   if (!tempSalary || tempSalary <= 0) {
-                    alert("Enter valid salary");
+                    toast.success("Enter valid salary");
                     return;
                   }
 
@@ -193,7 +210,7 @@ export default function DashboardScreen({
                     };
                   });
 
-                  alert(
+                  toast.success(
                     `💼 Salary updated to ₹${newSalary.toLocaleString()}`
                   );
 
@@ -239,7 +256,7 @@ export default function DashboardScreen({
                   if (!tempCity) return;
 
                   setCurrentCity(tempCity);
-                  alert(`🏙️ City updated to ${tempCity}`);
+                  toast.success(`🏙️ City updated to ${tempCity}`);
                   setShowCityModal(false);
                 }}
               >
@@ -344,6 +361,7 @@ export default function DashboardScreen({
               }}
               salary={currentSalary}
               city={currentCity}
+              isOverspending={isOverspending}
             />
           ))}
         </div>
@@ -394,15 +412,42 @@ export default function DashboardScreen({
         <button
           type="button"
           className="btn-primary next-month"
-          disabled={!allDone}
-          aria-disabled={!allDone}
+          disabled={
+            !allDone ||
+            isOverspending
+          }
+          aria-disabled={
+            !allDone ||
+            isOverspending
+          }
+          style={{
+            opacity:
+              !allDone || isOverspending
+                ? 0.5
+                : 1,
+
+            cursor:
+              !allDone || isOverspending
+                ? "not-allowed"
+                : "pointer",
+          }}
+
           onClick={() => {
-            if (!allDone) return;
-            if (typeof onNext === "function") onNext();
-            else console.warn("onNext prop is not a function", onNext);
+            if (!allDone || isOverspending)
+              return;
+            if (typeof onNext === "function") {
+              onNext();
+            } else {
+              console.warn(
+                "onNext prop is not a function",
+                onNext
+              );
+            }
           }}
         >
-          {state.month >= 12 ? "Finish Year" : "Next Month"} →
+          {state.month >= 12
+            ? "Finish Year"
+            : "Next Month"} →
         </button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { calculateOptionCost } from "../utils/calculateCost";
-export default function DecisionCard({ decision, selected, onSelect, salary, city }) {
+export default function DecisionCard({ decision, selected, onSelect, salary, city, isOverspending }) {
   return (
     <div className="decision-card">
       <div className="decision-title">
@@ -16,12 +16,44 @@ export default function DecisionCard({ decision, selected, onSelect, salary, cit
             salary,
             city
           );
+
+          const currentSelectedCost =
+            selected
+              ? calculateOptionCost(
+                selected,
+                decision.id,
+                salary,
+                city
+              )
+              : 0;
+
+          const willReduceExpense =
+            cost < currentSelectedCost;
+
           return (
             <div key={index}>
               <button
                 className="option-btn"
+                disabled={
+                  isOverspending &&
+                  !willReduceExpense &&
+                  selected !== option
+                }
                 onClick={() => onSelect(option)}
+
                 style={{
+                  opacity:
+                    isOverspending &&
+                      !willReduceExpense &&
+                      selected !== option
+                      ? 0.5
+                      : 1,
+                  cursor:
+                    isOverspending &&
+                      !willReduceExpense &&
+                      selected !== option
+                      ? "not-allowed"
+                      : "pointer",
                   background:
                     selected === option
                       ? "white"

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import decisionsData from "../data/decisions";
+import toast from "react-hot-toast";
 
 export default function SummaryScreen({ gameState, history, onReset, salary}) {
   
@@ -273,7 +274,37 @@ export default function SummaryScreen({ gameState, history, onReset, salary}) {
           {"Play Again"}
         </button>
 
-        <button className="btn-secondary">
+        <button
+          className="btn-secondary"
+          onClick={() => {
+
+            const text =
+              `💸 My Life After Salary Results
+
+🏦 Final Balance: ₹${gameState.balance.toLocaleString()}
+📈 Wealth: ₹${gameState.wealth.toLocaleString()}
+😰 Stress: ${gameState.stress}
+💳 Credit Score: ${gameState.creditScore}
+
+Can you survive adulthood better than me? 😅`;
+
+            if (navigator.share) {
+
+              navigator.share({
+                title: "Life After Salary",
+                text,
+              });
+
+            } else {
+
+              navigator.clipboard.writeText(text);
+
+              toast.success(
+                "Result copied to clipboard!"
+              );
+            }
+          }}
+        >
           {"Share Results"} 📤
         </button>
       </div>

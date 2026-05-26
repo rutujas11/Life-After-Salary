@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 const CITY_OPTIONS = [
   { id: "mumbai",    label: "Mumbai",    icon: "🌆" },
   { id: "pune",      label: "Pune",      icon: "🏙️" },
@@ -20,7 +21,7 @@ export default function OnboardingScreen({
     e.preventDefault(); // if wrapped in a <form>, prevent full-page submit
     // Basic validation
     if (!userProfile?.city || !currentSalary) {
-      alert("Please select your city and enter salary");
+      toast.success("Please select your city and enter salary");
       return;
     }
     // Advance to dashboard
