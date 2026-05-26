@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useTranslate from "../i18n/useTranslate";
 import {
   createUserWithEmailAndPassword,
   updateProfile
@@ -8,9 +7,7 @@ import {
 import { auth } from "../firebase/firebase";
 
 
-export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome }) {
-  const t = useTranslate(language);
-  const tx = t.tx;
+export default function SignupScreen({ onSignup, onGoToLogin, onGoHome }) {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail]       = useState("");
@@ -24,12 +21,12 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
     setErr("");
 
     if (!fullName || !email || !password || !confirm) {
-      setErr(tx("Please fill all fields"));
+      setErr("Please fill all fields");
       return;
     }
 
     if (password !== confirm) {
-      setErr(tx("Passwords don’t match"));
+      setErr("Passwords don’t match");
       return;
     }
 
@@ -111,17 +108,17 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
           boxShadow: "0 20px 60px rgba(255,46,99,0.25)",
         }}
       >
-        <h2 className="logo" style={{ marginBottom: 6 }}>{tx("Create your account")}</h2>
+        <h2 className="logo" style={{ marginBottom: 6 }}>{"Create your account"}</h2>
         <p className="tagline" style={{ textAlign: "center", marginBottom: 24 }}>
-          {tx("It only takes a minute")}
+          {"It only takes a minute"}
         </p>
 
         <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
           <div className="form-group">
-            <label className="form-label">{tx("Full name")}</label>
+            <label className="form-label">{"Full name"}</label>
             <input
               type="text"
-              placeholder={tx("e.g., Aditi Sharma")}
+              placeholder={"e.g., Aditi Sharma"}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               style={inputStyle}
@@ -130,10 +127,10 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
           </div>
 
           <div className="form-group">
-            <label className="form-label">{tx("Email")}</label>
+            <label className="form-label">{"Email"}</label>
             <input
               type="email"
-              placeholder={tx("you@example.com")}
+              placeholder={"you@example.com"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={inputStyle}
@@ -142,10 +139,10 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
           </div>
 
           <div className="form-group">
-            <label className="form-label">{tx("Password")}</label>
+            <label className="form-label">{"Password"}</label>
             <input
               type="password"
-              placeholder={tx("At least 6 characters")}
+              placeholder={"At least 6 characters"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={inputStyle}
@@ -155,10 +152,10 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
           </div>
 
           <div className="form-group">
-            <label className="form-label">{tx("Confirm password")}</label>
+            <label className="form-label">{"Confirm password"}</label>
             <input
               type="password"
-              placeholder={tx("Re-enter password")}
+              placeholder={"Re-enter password"}
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               style={inputStyle}
@@ -183,16 +180,16 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
           ) : null}
 
           <button type="submit" className="btn-primary">
-            {tx("Create account")}
+            {"Create account"}
           </button>
         </form>
 
         <div className="action-buttons" style={{ marginTop: 18 }}>
           <button className="btn-secondary" onClick={onGoToLogin}>
-            {tx("Have an account? Login")}
+            {"Have an account? Login"}
           </button>
           <button className="btn-secondary" onClick={onGoHome}>
-            {tx("Back to Home")}
+            {"Back to Home"}
           </button>
         </div>
       </div>

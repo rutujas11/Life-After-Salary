@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import useTranslate from "../i18n/useTranslate";
 import DECISIONS from "../data/decisions";
 import MetricCard from "../components/MetricCard";
 import DecisionCard from "../components/DecisionCard";
@@ -13,16 +12,12 @@ export default function DashboardScreen({
   decisions,
   onDecide,
   onNext,
-  language,
   currentSalary,
   currentCity,
   setCurrentSalary,
   setCurrentCity,
   setGameState
 }) {
-  // --- i18n ---
-  const t = useTranslate(language);
-  const tx = t.tx;
 
   // --- Guard against undefined gameState (prevents crash) ---
   const state = gameState && typeof gameState === "object" ? gameState : INITIAL_STATE;
@@ -265,7 +260,7 @@ export default function DashboardScreen({
       {/* Month header */}
       <div className="month-header">
         <h2 className="month-title">
-          {tx("Month")} {state.month} / 12
+          {"Month"} {state.month} / 12
         </h2>
       </div>
 
@@ -273,7 +268,7 @@ export default function DashboardScreen({
       <div className="metrics-grid">
         <MetricCard
           icon="💰"
-          label={tx("Balance")}
+          label={"Balance"}
           value={`₹${Number(state.balance || 0).toLocaleString()}`}
           valueColor={(state.balance || 0) > 0 ? "var(--success)" : "var(--danger)"}
           barPercent={Math.min(100, ((state.balance || 0) / 100000) * 100)}
@@ -281,7 +276,7 @@ export default function DashboardScreen({
 
         <MetricCard
           icon="📊"
-          label={tx("Credit Score")}
+          label={"Credit Score"}
           value={state.creditScore ?? 0}
           valueColor={
             (state.creditScore ?? 0) > 700
@@ -295,7 +290,7 @@ export default function DashboardScreen({
 
         <MetricCard
           icon="📈"
-          label={tx("Net Wealth")}
+          label={"Net Wealth"}
           value={`₹${Number(state.wealth || 0).toLocaleString()}`}
           valueColor="var(--neon-blue)"
           barPercent={Math.min(100, ((state.wealth || 0) / 200000) * 100)}
@@ -303,7 +298,7 @@ export default function DashboardScreen({
 
         <MetricCard
           icon="😰"
-          label={tx("Stress")}
+          label={"Stress"}
           value={`${state.stress ?? 0}%`}
           valueColor={
             (state.stress ?? 0) < 30
@@ -318,7 +313,7 @@ export default function DashboardScreen({
 
         <MetricCard
           icon="🛡️"
-          label={tx("Scam Risk")}
+          label={"Scam Risk"}
           value={`${state.scamRisk ?? 0}%`}
           valueColor={
             (state.scamRisk ?? 0) < 30
@@ -334,7 +329,7 @@ export default function DashboardScreen({
 
       {/* Decisions */}
       <div className="decision-section">
-        <h3 className="section-title">{tx("Make Your Monthly Decisions")}</h3>
+        <h3 className="section-title">{"Make Your Monthly Decisions"}</h3>
 
         <div className="decision-cards">
           {shuffledDecisions.map((d) => (
@@ -347,7 +342,6 @@ export default function DashboardScreen({
                 if (typeof onDecide === "function") onDecide(d.id, o);
                 else console.warn("onDecide prop is not a function", onDecide);
               }}
-              language={language}
               salary={currentSalary}
               city={currentCity}
             />
@@ -408,7 +402,7 @@ export default function DashboardScreen({
             else console.warn("onNext prop is not a function", onNext);
           }}
         >
-          {state.month >= 12 ? tx("Finish Year") : tx("Next Month")} →
+          {state.month >= 12 ? "Finish Year" : "Next Month"} →
         </button>
       </div>
     </div>

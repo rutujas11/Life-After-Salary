@@ -1,6 +1,3 @@
-import useTranslate from "../i18n/useTranslate";
-
-// Put this near the top of OnboardingScreen.jsx (outside the component)
 const CITY_OPTIONS = [
   { id: "mumbai",    label: "Mumbai",    icon: "🌆" },
   { id: "pune",      label: "Pune",      icon: "🏙️" },
@@ -9,11 +6,7 @@ const CITY_OPTIONS = [
   { id: "delhi",     label: "Delhi",     icon: "🛕" },
 ];
 
-// If you later want custom SVGs, switch `icon` to a component or image path, e.g.
-// icon: <YourSvg style={{ width: 28, height: 28 }} />  OR  icon: "/src/assets/cities/hyderabad.svg"
-
 export default function OnboardingScreen({
-  language,
   userProfile = { city: "", salary: "" },   // fallback prevents crashes
   setUserProfile,
   onComplete,
@@ -21,14 +14,13 @@ export default function OnboardingScreen({
   currentSalary,
   setCurrentSalary
 }) {
-  const t = useTranslate(language);
-  const tx = t.tx;
+
 
   const handleStart = (e) => {
     e.preventDefault(); // if wrapped in a <form>, prevent full-page submit
     // Basic validation
     if (!userProfile?.city || !currentSalary) {
-      alert(tx("Please select your city and enter salary"));
+      alert("Please select your city and enter salary");
       return;
     }
     // Advance to dashboard
@@ -39,12 +31,12 @@ export default function OnboardingScreen({
     <div className="screen">
       <div className="onboarding-card">
         <h2 className="logo" style={{ marginBottom: 6 }}>
-          {tx("Let’s set up your profile")}
+          {"Let’s set up your profile"}
         </h2>
 
         {/* CITY */}
         <div className="form-group">
-          <label className="form-label">{tx("Choose your city")}</label>
+          <label className="form-label">{"Choose your city"}</label>
 
           <div className="select-grid">
             {CITY_OPTIONS.map(({ id, label, icon }) => {
@@ -91,7 +83,7 @@ export default function OnboardingScreen({
 
         {/* SALARY */}
         <div className="form-group">
-          <label className="form-label">{tx("Enter your monthly salary")}</label>
+          <label className="form-label">{"Enter your monthly salary"}</label>
 
           <input
             type="number"
@@ -116,7 +108,7 @@ export default function OnboardingScreen({
             onClick={handleStart}
             disabled={!userProfile.city || !currentSalary}
           >
-            {tx("Start Journey")}
+            {"Start Journey"}
           </button>
 
           <button
@@ -124,7 +116,7 @@ export default function OnboardingScreen({
             className="btn-secondary"
             onClick={() => setScreen("home")}
           >
-            {tx("<- Back")}
+            {"<- Back"}
           </button>
         </div>
       </div>

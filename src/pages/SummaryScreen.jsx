@@ -1,20 +1,14 @@
 /* eslint-disable no-unused-vars */
-import useTranslate from "../i18n/useTranslate";
 import decisionsData from "../data/decisions";
 
-export default function SummaryScreen({ gameState, history, onReset, language, salary}) {
+export default function SummaryScreen({ gameState, history, onReset, salary}) {
   
-  const t = useTranslate(language);
-  const tx = t.tx;
-
-  
-
   const badges = [];
-  if (gameState.creditScore > 750) badges.push({ icon: "⭐", label: tx("Credit Master") });
-  if (gameState.balance > 50000) badges.push({ icon: "💰", label: tx("Money Saver") });
-  if (gameState.stress < 30) badges.push({ icon: "😌", label: tx("Stress-Free") });
-  if (gameState.investments > 30000) badges.push({ icon: "📈", label: tx("Smart Investor") });
-  if (gameState.scamRisk < 20) badges.push({ icon: "🛡️", label: tx("Scam Defender") });
+  if (gameState.creditScore > 750) badges.push({ icon: "⭐", label: "Credit Master" });
+  if (gameState.balance > 50000) badges.push({ icon: "💰", label: "Money Saver" });
+  if (gameState.stress < 30) badges.push({ icon: "😌", label: "Stress-Free" });
+  if (gameState.investments > 30000) badges.push({ icon: "📈", label: "Smart Investor" });
+  if (gameState.scamRisk < 20) badges.push({ icon: "🛡️", label: "Scam Defender" });
 
   // ---------------- SMART AI SIMULATION ----------------
 
@@ -141,7 +135,7 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
     <div className="screen summary-container">
       
       {/* TITLE */}
-      <h1 className="summary-title">{tx("Year End Summary")}</h1>
+      <h1 className="summary-title">{"Year End Summary"}</h1>
 
       <div style={{ textAlign: "center", marginBottom: "20px" }}>
           {playerBeatsSmart ? (
@@ -183,15 +177,15 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
         
         {/* YOU SECTION */}
         <div className="comparison-card loser">
-          <div className="comparison-label">{tx("Your Journey")}</div>
+          <div className="comparison-label">{"Your Journey"}</div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Balance")}</div>
+            <div className="stat-label">{"Balance"}</div>
             <div className="stat-value">₹{gameState.balance.toLocaleString()}</div>
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Credit Score")}</div>
+            <div className="stat-label">{"Credit Score"}</div>
             <div className="stat-value">{gameState.creditScore}</div>
 
             {creditWinner === "you" && (
@@ -200,7 +194,7 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Wealth")}</div>
+            <div className="stat-label">{"Wealth"}</div>
             <div className="stat-value">₹{gameState.wealth.toLocaleString()}</div>
 
             {wealthWinner === "you" && (
@@ -209,7 +203,7 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Stress")}</div>
+            <div className="stat-label">{"Stress"}</div>
             <div className="stat-value">{gameState.stress}%</div>
 
             {stressWinner === "you" && (
@@ -223,25 +217,25 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
 
         {/* SMART USER SECTION */}
         <div className="comparison-card winner">
-          <div className="comparison-label">{tx("Balanced Financial Strategy")} ✨</div>
+          <div className="comparison-label">{"Balanced Financial Strategy"} ✨</div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Balance")}</div>
+            <div className="stat-label">{"Balance"}</div>
             <div className="stat-value">₹{smartUser.balance.toLocaleString()}</div>
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Credit Score")}</div>
+            <div className="stat-label">{"Credit Score"}</div>
             <div className="stat-value">{smartUser.creditScore}</div>
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Wealth")}</div>
+            <div className="stat-label">{"Wealth"}</div>
             <div className="stat-value">₹{smartUser.wealth.toLocaleString()}</div>
           </div>
 
           <div className="stat-item">
-            <div className="stat-label">{tx("Stress")}</div>
+            <div className="stat-label">{"Stress"}</div>
             <div className="stat-value">{smartUser.stress}%</div>
           </div>
 
@@ -252,7 +246,7 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
 
             {chosenOptions.map((item, index) => (
               <div key={index}>
-                • {tx(item.decision)}: {tx(item.label)}
+                • {item.decision}: {item.label}
               </div>
             ))}
           </div>
@@ -262,12 +256,12 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
       {/* Achievements */}
       {badges.length > 0 && (
         <div className="achievements">
-          <h3 className="achievement-title">{tx("Achievements Unlocked")}</h3>
+          <h3 className="achievement-title">{"Achievements Unlocked"}</h3>
           
           <div className="achievement-badges">
             {badges.map((b, i) => (
               <div key={i} className="badge">
-                <span className="badge-icon">{b.icon}</span> {tx(b.label)}
+                <span className="badge-icon">{b.icon}</span> {b.label}
               </div>
             ))}
           </div>
@@ -276,11 +270,11 @@ export default function SummaryScreen({ gameState, history, onReset, language, s
 
       <div className="action-buttons">
         <button className="btn-primary" onClick={onReset}>
-          {tx("Play Again")}
+          {"Play Again"}
         </button>
 
         <button className="btn-secondary">
-          {tx("Share Results")} 📤
+          {"Share Results"} 📤
         </button>
       </div>
     </div>

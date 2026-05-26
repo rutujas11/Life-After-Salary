@@ -1,15 +1,12 @@
 import { useState } from "react";
-import useTranslate from "../i18n/useTranslate";
 import {
   signInWithEmailAndPassword
 } from "firebase/auth";
 
 import { auth } from "../firebase/firebase";
 
-export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome }) {
-  const t = useTranslate(language);
-  const tx = t.tx;
-
+export default function LoginScreen({ onLogin, onGoToSignup, onGoHome }) {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
@@ -19,7 +16,7 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
     setErr("");
 
     if (!email || !password) {
-      setErr(tx("Please fill all fields"));
+      setErr("Please fill all fields");
       return;
     }
 
@@ -103,17 +100,17 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
           boxShadow: "0 20px 60px rgba(8, 217, 214, 0.25)",
         }}
       >
-        <h2 className="logo" style={{ marginBottom: 6 }}>{tx("Welcome back")}</h2>
+        <h2 className="logo" style={{ marginBottom: 6 }}>{"Welcome back"}</h2>
         <p className="tagline" style={{ textAlign: "center", marginBottom: 24 }}>
-          {tx("Sign in to continue your journey")}
+          {"Sign in to continue your journey"}
         </p>
 
         <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
           <div className="form-group">
-            <label className="form-label">{tx("Email")}</label>
+            <label className="form-label">{"Email"}</label>
             <input
               type="email"
-              placeholder={tx("you@example.com")}
+              placeholder={"you@example.com"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={inputStyle}
@@ -122,7 +119,7 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
           </div>
 
           <div className="form-group">
-            <label className="form-label">{tx("Password")}</label>
+            <label className="form-label">{"Password"}</label>
             <input
               type="password"
               placeholder="••••••••"
@@ -149,16 +146,16 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
           ) : null}
 
           <button type="submit" className="btn-primary">
-            {tx("Login")}
+            {"Login"}
           </button>
         </form>
 
         <div className="action-buttons" style={{ marginTop: 18 }}>
           <button className="btn-secondary" onClick={onGoToSignup}>
-            {tx("Create an account")}
+            {"Create an account"}
           </button>
           <button className="btn-secondary" onClick={onGoHome}>
-            {tx("Back to Home")}
+            {"Back to Home"}
           </button>
         </div>
       </div>
