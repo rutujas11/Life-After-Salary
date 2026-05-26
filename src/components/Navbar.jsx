@@ -1,19 +1,10 @@
-import LanguageToggle from "./LanguageToggle";
-import useTranslate from "../i18n/useTranslate";
-
 export default function Navbar({
   screen,
   setScreen,
-  language,
-  setLanguage,
-  // auth props
   isAuthenticated = false,
   user = null,
   onLogout = () => {},
 }) {
-  const t = useTranslate(language);
-  const tx = t.tx;
-
   const firstName =
     user?.name?.trim()?.split(" ")?.[0] ||
     (user?.email ? user.email.split("@")[0] : "");
@@ -22,7 +13,7 @@ export default function Navbar({
     <div className="navbar">
       {/* Logo / Brand */}
       <div className="nav-logo" onClick={() => setScreen("home")}>
-        💸 {tx("Life After Salary")}
+        💸 {"Life After Salary"}
       </div>
 
       {/* Tabs */}
@@ -31,21 +22,21 @@ export default function Navbar({
           className={screen === "home" ? "active" : ""}
           onClick={() => setScreen("home")}
         >
-          🏠 {tx("Home")}
+          🏠 {"Home"}
         </button>
 
         <button
           className={screen === "about" ? "active" : ""}
           onClick={() => setScreen("about")}
         >
-          ℹ️ {tx("About")}
+          ℹ️ {"About"}
         </button>
 
         <button
           className={screen === "onboarding" ? "active" : ""}
           onClick={() => setScreen("onboarding")}
         >
-          🎮 {tx("Play Game")}
+          🎮 {"Play Game"}
         </button>
       </div>
 
@@ -59,13 +50,13 @@ export default function Navbar({
               className={screen === "login" ? "active" : ""}
               onClick={() => setScreen("login")}
             >
-              {tx("Login")}
+              {"Login"}
             </button>
             <button
               className={screen === "signup" ? "active" : ""}
               onClick={() => setScreen("signup")}
             >
-              {tx("Sign up")}
+              {"Sign up"}
             </button>
           </div>
         ) : (
@@ -80,17 +71,15 @@ export default function Navbar({
                 letterSpacing: "0.5px",
               }}
             >
-              {tx("Hi")},{" "}
+              {"Hi"},{" "}
               <strong style={{ color: "var(--neon-blue)" }}>
-                {firstName || tx("Player")}
+                {firstName || "Player"}
               </strong>
             </span>
-            <button onClick={onLogout}>{tx("Logout")}</button>
+            <button onClick={onLogout}>{"Logout"}</button>
           </div>
         )}
-
-        {/* Language toggle after auth buttons */}
-        <LanguageToggle language={language} setLanguage={setLanguage} />
+        
       </div>
     </div>
   );

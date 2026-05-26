@@ -1,16 +1,10 @@
-import useTranslate from "../i18n/useTranslate";
 import { calculateOptionCost } from "../utils/calculateCost";
-export default function DecisionCard({ decision, selected, onSelect, language, salary, city }) {
-  
-  const t = useTranslate(language);
-  const tx = t.tx;
-
-
+export default function DecisionCard({ decision, selected, onSelect, salary, city }) {
   return (
     <div className="decision-card">
       <div className="decision-title">
         <span style={{ marginRight: "8px" }}>{decision.icon}</span>
-        {tx(decision.title)}
+        {decision.title}
       </div>
 
       <div className="decision-options">
@@ -40,7 +34,7 @@ export default function DecisionCard({ decision, selected, onSelect, language, s
               >
                 <div className="option-content">
                   <div className="option-label">
-                    {tx(option.label)}
+                    {option.label}
                   </div>
 
                   {/* ✅ Always show cost inside button */}
@@ -69,7 +63,7 @@ export default function DecisionCard({ decision, selected, onSelect, language, s
                           : "impact-neutral"
                     }
                   >
-                    {tx(tag)}
+                    {tag}
                   </span>
                 ))}
               </div>

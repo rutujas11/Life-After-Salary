@@ -7,6 +7,15 @@ import OnboardingScreen from "./pages/OnboardingScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import SummaryScreen from "./pages/SummaryScreen";
 
+import "./firebase/firebase";
+import {
+  doc,
+  setDoc,
+  getDoc
+} from "firebase/firestore";
+
+import { db } from "./firebase/firebase";
+
 import LoginScreen from "./pages/LoginScreen";
 import SignupScreen from "./pages/SignupScreen";
 
@@ -17,11 +26,32 @@ import { INITIAL_STATE } from "./data/constants";
 import { calculateOptionCost } from "./utils/calculateCost";
 
 export default function App() {
-  const [language, setLanguage] = useState("EN");
   const [screen, setScreen] = useState("home");
 
   // === NEW: demo auth state ===
   const [auth, setAuth] = useState({ isAuthenticated: false, user: null });
+
+  // === firebase connection ===
+  const saveGame = async (userId, data) => {
+
+    await setDoc(
+      doc(db, "gameSaves", userId),
+      data
+    );
+  };
+
+  const loadGame = async (userId) => {
+
+    const snap = await getDoc(
+      doc(db, "gameSaves", userId)
+    );
+
+    if (snap.exists()) {
+      return snap.data();
+    }
+
+    return null;
+  };
 
   // restore session
   useEffect(() => {
@@ -38,32 +68,64 @@ export default function App() {
     }
   }, []);
 
-  const handleSignup = (name, email) => {
-    const user = { name, email };
-    localStorage.setItem("las_user", JSON.stringify(user));
-    localStorage.setItem("las_session", "1");
-    setAuth({ isAuthenticated: true, user });
-    setScreen("home"); // start flow
+  const handleSignup = async (user) => {
+    localStorage.setItem(
+      "las_session",
+      "1"
+    );
+
+    localStorage.setItem(
+      "las_user",
+      JSON.stringify(user)
+    );
+
+    setAuth({
+      isAuthenticated: true,
+      user,
+    });
+
+    await saveGame(user.email, {
+      gameState: INITIAL_STATE,
+      currentCity: "",
+      currentSalary: 0,
+      history: []
+    });
+
+    setScreen("home");
   };
 
-  const handleLogin = (email) => {
-    const userRaw = localStorage.getItem("las_user");
+  const handleLogin = async (user) => {
+    localStorage.setItem(
+      "las_session",
+      "1"
+    );
 
-    if (!userRaw) {
-      alert("No account found. Please sign up.");
-      setScreen("signup");
-      return;
+    localStorage.setItem(
+      "las_user",
+      JSON.stringify(user)
+    );
+
+    setAuth({
+      isAuthenticated: true,
+      user,
+    });
+
+    const save = await loadGame(user.email);
+    if (save) {
+      setGameState(
+        save.gameState || INITIAL_STATE
+      );
+      setCurrentCity(
+        save.currentCity || ""
+      );
+      setCurrentSalary(
+        save.currentSalary || 0
+      );
+      setHistory(
+        save.history || []
+      );
     }
-
-    const user = JSON.parse(userRaw);
-
-    if (user.email === email) {
-      localStorage.setItem("las_session", "1");
-      setAuth({ isAuthenticated: true, user });
-      setScreen("home");
-    } else {
-      alert("User not found. Please sign up.");
-    }
+    setScreen("home");
   };
 
   const handleLogout = () => {
@@ -94,6 +156,25 @@ export default function App() {
       setShowEvent(true);
     }
   }, [gameState.month, screen]);
+
+  useEffect(() => {
+
+    if (!auth?.user) return;
+
+    saveGame(auth.user.email, {
+      gameState,
+      currentCity,
+      currentSalary,
+      history
+    });
+
+  }, [
+    gameState,
+    currentCity,
+    currentSalary,
+    history,
+    auth
+  ]);
 
   // Guard private screens
   useEffect(() => {
@@ -220,9 +301,6 @@ export default function App() {
       <Navbar
         screen={screen}
         setScreen={setScreen}
-        language={language}
-        setLanguage={setLanguage}
-        // NEW props
         isAuthenticated={auth.isAuthenticated}
         user={auth.user}
         onLogout={handleLogout}
@@ -230,14 +308,13 @@ export default function App() {
 
       {/* Public screens */}
       {screen === "home" && (
-        <HomeScreen language={language}
+        <HomeScreen
           onStart={() => setScreen(auth.isAuthenticated ? "onboarding" : "signup")}
           onAbout={() => setScreen("about")}
         />
       )}
       {screen === "about" && (
         <AboutScreen 
-          language={language}
           setScreen={setScreen} 
         />
       )}
@@ -245,7 +322,6 @@ export default function App() {
       {/* NEW: auth screens */}
       {screen === "login" && (
         <LoginScreen 
-          language={language}
           onLogin={handleLogin}
           onGoToSignup={() => setScreen("signup")}
           onGoHome={() => setScreen("home")}
@@ -253,7 +329,6 @@ export default function App() {
       )}
       {screen === "signup" && (
         <SignupScreen
-          language={language}
           onSignup={handleSignup}
           onGoToLogin={() => setScreen("login")}
           onGoHome={() => setScreen("home")}
@@ -263,7 +338,6 @@ export default function App() {
       {/* Private screens */}
       {screen === "onboarding" && (
         <OnboardingScreen
-          language={language}
           userProfile={userProfile}
           setUserProfile={setUserProfile}
           setScreen={setScreen}
@@ -289,7 +363,6 @@ export default function App() {
       
       {screen === "dashboard" && (
         <DashboardScreen
-          language={language}
           gameState={gameState}
           decisions={decisions}
           onDecide={handleDecision}
@@ -304,7 +377,6 @@ export default function App() {
       )}
       {screen === "summary" && (
         <SummaryScreen
-          language={language}
           gameState={gameState}
           history={history}
           onReset={resetGame}
@@ -314,7 +386,6 @@ export default function App() {
 
       {showEvent && currentEvent && (
         <EventModal
-          language={language}
           event={currentEvent}
           onChoose={(option) => {
             let updatedState = { ...gameState };

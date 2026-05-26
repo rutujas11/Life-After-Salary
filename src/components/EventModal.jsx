@@ -1,10 +1,7 @@
-import useTranslate from "../i18n/useTranslate";
 import { useState } from "react";
 
-export default function EventModal({ event, onChoose, language }) {
+export default function EventModal({ event, onChoose }) {
   const [selected, setSelected] = useState(null);
-  const t = useTranslate(language);
-  const tx = t.tx;
 
   const choose = (option) => {
     setSelected(option);
@@ -16,8 +13,8 @@ export default function EventModal({ event, onChoose, language }) {
       <div className="modal-content">
 
         <div className="modal-icon">{event.icon}</div>
-        <h2 className="modal-title">{tx(event.title)}</h2>
-        <p className="modal-description">{tx(event.description)}</p>
+        <h2 className="modal-title">{event.title}</h2>
+        <p className="modal-description">{event.description}</p>
 
         {!selected ? (
           <div className="modal-actions">
@@ -27,13 +24,13 @@ export default function EventModal({ event, onChoose, language }) {
                 className={`modal-btn ${i === 0 ? "modal-btn-primary" : "modal-btn-secondary"}`}
                 onClick={() => choose(option)}
               >
-                {tx(option.label)}
+                {option.label}
               </button>
             ))}
           </div>
         ) : (
           <p className="modal-description" style={{ color: "yellow", marginTop: 20 }}>
-            {tx(selected.outcome)}
+            {selected.outcome}
           </p>
         )}
       </div>

@@ -1,5 +1,10 @@
 import { useState } from "react";
 import useTranslate from "../i18n/useTranslate";
+import {
+  signInWithEmailAndPassword
+} from "firebase/auth";
+
+import { auth } from "../firebase/firebase";
 
 export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome }) {
   const t = useTranslate(language);
@@ -9,14 +14,40 @@ export default function LoginScreen({ language, onLogin, onGoToSignup, onGoHome 
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     setErr("");
+
     if (!email || !password) {
       setErr(tx("Please fill all fields"));
       return;
     }
-    onLogin(email.trim());
+
+    try {
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      onLogin({
+        name:
+          userCredential.user.displayName || "",
+        email: email.trim(),
+      });
+
+    } catch (error) {
+      if (
+        error.code === "auth/invalid-credential" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found"
+      ) {
+        setErr("Invalid email or password");
+      } else {
+        setErr(error.message);
+      }
+    }
   };
 
   return (

@@ -181,20 +181,26 @@ export default function DashboardScreen({
               <button
                 className="btn-primary"
                 onClick={() => {
-                  if (!tempSalary || tempSalary <= 0) return;
 
-                  setCurrentSalary(Number(tempSalary));
+                  if (!tempSalary || tempSalary <= 0) {
+                    alert("Enter valid salary");
+                    return;
+                  }
 
-                  setGameState((prev) => ({
-                    ...prev,
-                    balance:
-                      prev.balance +
-                      (tempSalary - currentSalary),
+                  const newSalary = Number(tempSalary);
+                  setCurrentSalary(newSalary);
+                  setGameState((prev) => {
+                    const diff = newSalary - currentSalary;
+                    return {
+                      ...prev,
+                      balance: prev.balance + diff,
+                      wealth: prev.wealth + diff,
+                    };
+                  });
 
-                    wealth:
-                      prev.wealth +
-                      (tempSalary - currentSalary),
-                  }));
+                  alert(
+                    `💼 Salary updated to ₹${newSalary.toLocaleString()}`
+                  );
 
                   setShowSalaryModal(false);
                 }}
@@ -238,6 +244,7 @@ export default function DashboardScreen({
                   if (!tempCity) return;
 
                   setCurrentCity(tempCity);
+                  alert(`🏙️ City updated to ${tempCity}`);
                   setShowCityModal(false);
                 }}
               >

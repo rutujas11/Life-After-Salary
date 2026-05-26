@@ -1,5 +1,12 @@
 import { useState } from "react";
 import useTranslate from "../i18n/useTranslate";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+
+import { auth } from "../firebase/firebase";
+
 
 export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome }) {
   const t = useTranslate(language);
@@ -10,19 +17,52 @@ export default function SignupScreen({ language, onSignup, onGoToLogin, onGoHome
   const [password, setPassword] = useState("");
   const [confirm, setConfirm]   = useState("");
   const [err, setErr]           = useState("");
+  
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     setErr("");
+
     if (!fullName || !email || !password || !confirm) {
       setErr(tx("Please fill all fields"));
       return;
     }
+
     if (password !== confirm) {
       setErr(tx("Passwords don’t match"));
       return;
     }
-    onSignup(fullName.trim(), email.trim(), password);
+
+    try {
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      await updateProfile(
+        userCredential.user,
+        {
+          displayName: fullName.trim(),
+        }
+      );
+
+      onSignup({
+        name: fullName.trim(),
+        email: email.trim(),
+      });
+
+    } catch (error) {
+      if (
+        error.code ===
+        "auth/email-already-in-use"
+      ) {
+        setErr("Email already registered");
+      } else {
+        setErr(error.message);
+      }
+    }
   };
 
   return (
