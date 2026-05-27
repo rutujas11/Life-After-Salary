@@ -266,6 +266,61 @@ export default function App() {
       toast.success("⚠️ You are bankrupt! Manage wisely.");
     }
 
+    let monthlyScore = 0;
+
+    // ✅ Positive balance reward
+    if (updatedState.balance > 0) {
+      monthlyScore += 50;
+    }
+
+    // ✅ Savings reward
+    monthlyScore += Math.round(
+      (updatedState.savings || 0) / 1000
+    );
+
+    // ✅ Investment reward
+    monthlyScore += Math.round(
+      (updatedState.investments || 0) / 1000
+    );
+
+    // ✅ Wealth reward
+    monthlyScore += Math.round(
+      (updatedState.wealth || 0) / 5000
+    );
+
+    // ✅ Credit score reward
+    monthlyScore += Math.round(
+      (updatedState.creditScore || 0) / 50
+    );
+
+    // ✅ Low stress bonus
+    if ((updatedState.stress || 0) < 40) {
+      monthlyScore += 30;
+    }
+
+    // ❌ High stress penalty
+    if ((updatedState.stress || 0) > 70) {
+      monthlyScore -= 40;
+    }
+
+    // ❌ Overspending punishment
+    if (updatedState.balance < 0) {
+      monthlyScore -= 100;
+    }
+
+    // ❌ Scam risk punishment
+    monthlyScore -= Math.round(
+      (updatedState.scamRisk || 0) / 5
+    );
+
+    // ✅ Final score
+    updatedState.score =
+      Math.max(
+        0,
+        (updatedState.score || 0) +
+        monthlyScore
+      );
+
     // 5️⃣ Increment month
     updatedState.month += 1;
 

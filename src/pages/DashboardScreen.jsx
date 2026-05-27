@@ -6,7 +6,6 @@ import DecisionCard from "../components/DecisionCard";
 import { CITY_CONFIG } from "../data/cityConfig";
 import { INITIAL_STATE } from "../data/constants";
 import { toast } from "react-hot-toast";
-import { calculateOptionCost } from "../utils/calculateCost";
 
 
 export default function DashboardScreen({
@@ -341,6 +340,17 @@ export default function DashboardScreen({
           }
           barPercent={state.scamRisk ?? 0}
           barGradient="linear-gradient(90deg, var(--success), var(--danger))"
+        />
+
+        <MetricCard
+          icon="⭐"
+          label={"Life Score"}
+          value={state.score || 0}
+          valueColor="gold"
+          barPercent={Math.min(
+            100,
+            ((state.score || 0) / 1000) * 100
+          )}
         />
       </div>
 

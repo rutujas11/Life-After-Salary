@@ -132,11 +132,70 @@ export default function SummaryScreen({ gameState, history, onReset, salary}) {
     gameState.stress < smartUser.stress ? "you" :
     gameState.stress > smartUser.stress ? "smart" : "tie";
 
+
+  const score =
+    gameState.score || 0;
+
+  let level = ":worst";
+
+  if (score > 200) level = ": Okish";
+  if (score > 400) level = ": Good";
+  if (score > 700) level = ": Better";
+  if (score > 1000) level = ": Awesome";
+
+  let rank = "😅 Beginner";
+
+  if (score > 300) {
+    rank = "💼 Salary Master";
+  }
+
+  if (score > 600) {
+    rank = "📈 Wealth Builder";
+  }
+
+  if (score > 1000) {
+    rank = "👑 Financial Legend";
+  }
+
   return (
     <div className="screen summary-container">
       
       {/* TITLE */}
       <h1 className="summary-title">{"Year End Summary"}</h1>
+      <div
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h2
+          style={{
+            color: "gold",
+            marginBottom: "10px",
+            fontSize: "34px",
+          }}
+        >
+          🏆 Level {level}
+        </h2>
+
+        <h3
+          style={{
+            color: "#08d9d6",
+            marginBottom: "10px",
+          }}
+        >
+          ⭐ Score: {score.toLocaleString()}
+        </h3>
+
+        <div
+          style={{
+            fontSize: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          {rank}
+        </div>
+      </div>
 
       <div style={{ textAlign: "center", marginBottom: "20px" }}>
           {playerBeatsSmart ? (
@@ -280,7 +339,8 @@ export default function SummaryScreen({ gameState, history, onReset, salary}) {
 
             const text =
               `💸 My Life After Salary Results
-
+⭐ Score: ${score}
+🏆 Rank: ${level}
 🏦 Final Balance: ₹${gameState.balance.toLocaleString()}
 📈 Wealth: ₹${gameState.wealth.toLocaleString()}
 😰 Stress: ${gameState.stress}
