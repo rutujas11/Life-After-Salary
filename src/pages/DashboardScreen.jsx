@@ -140,7 +140,6 @@ export default function DashboardScreen({
     }
   }, [isOverspending]);
   
-
   return (
     <div className="screen dashboard">
       
@@ -156,6 +155,7 @@ export default function DashboardScreen({
         <button
           className="btn-secondary"
           onClick={() => {
+            setShowCityModal(false);
             setTempSalary(currentSalary);
             setShowSalaryModal(true);
           }}
@@ -166,6 +166,7 @@ export default function DashboardScreen({
         <button
           className="btn-secondary"
           onClick={() => {
+            setShowSalaryModal(false);
             setTempCity(currentCity);
             setShowCityModal(true);
           }}
@@ -235,22 +236,45 @@ export default function DashboardScreen({
           <div className="custom-modal">
             <h3>🏙️ Change City</h3>
 
-            <select
-              className="salary-input"
-              value={tempCity}
-              onChange={(e) => setTempCity(e.target.value)}
-            >
-              <option value="">Select City</option>
-              <option value="Mumbai">🌆 Mumbai</option>
-              <option value="Pune">🏙️ Pune</option>
-              <option value="Delhi">🏛️ Delhi</option>
-              <option value="Bengaluru">🌉 Bengaluru</option>
-              <option value="Hyderabad">🕌 Hyderabad</option>
-            </select>
+            <div className="city-select-wrapper">
+              <select
+                className="city-select"
+                value={tempCity}
+                onChange={(e) => setTempCity(e.target.value)}
+              >
+                <option value="Mumbai">
+                  🌆 Mumbai
+                </option>
 
-            <div className="modal-actions">
+                <option value="Pune">
+                  🏙️ Pune
+                </option>
+
+                <option value="Delhi">
+                  🏛️ Delhi
+                </option>
+
+                <option value="Bengaluru">
+                  🌉 Bengaluru
+                </option>
+
+                <option value="Hyderabad">
+                  🕌 Hyderabad
+                </option>
+              </select>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "12px",
+                marginTop: "40px",
+                width: "100%",
+              }}
+            >
               <button
-                className="btn-primary"
+                className="btn-secondary"
                 onClick={() => {
                   if (!tempCity) return;
 
@@ -262,7 +286,7 @@ export default function DashboardScreen({
                 Save
               </button>
 
-              <button
+               <button
                 className="btn-secondary"
                 onClick={() => setShowCityModal(false)}
               >
@@ -274,7 +298,7 @@ export default function DashboardScreen({
       )}
 
       {/* Month header */}
-      <div className="month-header">
+      <div className="month-header" style={{ marginTop: "28px" }}>
         <h2 className="month-title">
           {"Month"} {state.month} / 12
         </h2>
