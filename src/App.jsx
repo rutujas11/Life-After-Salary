@@ -6,6 +6,7 @@ import AboutScreen from "./pages/AboutScreen";
 import OnboardingScreen from "./pages/OnboardingScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import SummaryScreen from "./pages/SummaryScreen";
+import "./App.css";
 
 import "./firebase/firebase";
 import {
@@ -340,13 +341,16 @@ export default function App() {
 
   return (
     <>
-      <Navbar
-        screen={screen}
-        setScreen={setScreen}
-        isAuthenticated={auth.isAuthenticated}
-        user={auth.user}
-        onLogout={handleLogout}
-      />
+      {screen !== "dashboard" &&
+        screen !== "summary" && (
+          <Navbar
+            screen={screen}
+            setScreen={setScreen}
+            isAuthenticated={auth.isAuthenticated}
+            user={auth.user}
+            onLogout={handleLogout}
+          />
+        )}
 
       {/* Public screens */}
       {screen === "home" && (
@@ -415,8 +419,12 @@ export default function App() {
           setCurrentSalary={setCurrentSalary}
           setCurrentCity={setCurrentCity}
           setGameState={setGameState}
+          setScreen={setScreen}
+          onLogout={handleLogout}
+          user={auth.user}
         />
       )}
+
       {screen === "summary" && (
         <SummaryScreen
           gameState={gameState}

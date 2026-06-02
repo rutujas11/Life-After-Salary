@@ -12,3 +12,6 @@ b. Add “Move City” event mid-game (super cool feature)
 c. add go back option on game screen to city and salary selection change
 d. add one more button on home screen continue the game, if we left game in middle and 
     also add start new game if we want to start new game
+
+make mobile friendly UI. it should not show navbar when we start playing game. place three line icon
+for navbar when we are playing on phone

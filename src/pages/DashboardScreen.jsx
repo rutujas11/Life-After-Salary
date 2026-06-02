@@ -17,7 +17,10 @@ export default function DashboardScreen({
   currentCity,
   setCurrentSalary,
   setCurrentCity,
-  setGameState
+  setGameState,
+  setScreen,
+  onLogout,
+  user
 }) {
 
   // --- Guard against undefined gameState (prevents crash) ---
@@ -40,13 +43,13 @@ export default function DashboardScreen({
 
   const [showSalaryModal, setShowSalaryModal] = useState(false);
   const [showCityModal, setShowCityModal] = useState(false);
-
   const [tempSalary, setTempSalary] = useState(currentSalary || 0);
+  const [tempCity, setTempCity] = useState(currentCity);
+  const [showMenu, setShowMenu] = useState(false);
+  
   useEffect(() => {
     setTempSalary(currentSalary || 0);
   }, [currentSalary]);
-
-  const [tempCity, setTempCity] = useState(currentCity);
 
   useEffect(() => {
     document.documentElement.scrollTo({
@@ -143,6 +146,79 @@ export default function DashboardScreen({
   return (
     <div className="screen dashboard">
       
+      <button
+        className="menu-trigger"
+        onClick={() => setShowMenu(true)}
+      >
+        ☰
+      </button>
+
+      {showMenu && (
+        <>
+          <div
+            className="drawer-overlay"
+            onClick={() => setShowMenu(false)}
+          />
+
+          <div className="side-drawer">
+
+            <div className="drawer-top">
+              <button
+                className="close-btn"
+                onClick={() => setShowMenu(false)}
+              >
+                ✕
+              </button>
+
+              <div className="profile-avatar">
+                👤
+              </div>
+
+              <h3 className="profile-name">
+                {user?.name || "Player"}
+              </h3>
+
+              <div className="profile-info">
+                💰 ₹{Number(currentSalary).toLocaleString()}
+              </div>
+
+              <div className="profile-info">
+                🏙️ {currentCity}
+              </div>
+            </div>
+
+            <button 
+              className="drawer-link"
+              onClick={() => setScreen("home")}
+            >
+              🏠 Home
+            </button>
+
+            <button 
+              className="drawer-link"
+              onClick={() => setScreen("about")}
+            >
+              ℹ️ About
+            </button>
+
+            <button 
+              className="drawer-link"
+              onClick={() => setShowMenu(false)}
+            >
+              🎮 Resume Game
+            </button>
+
+            <button 
+              className="drawer-link"
+              onClick={onLogout}
+            >
+              🚪 Logout
+            </button>
+
+          </div>
+        </>
+      )}
+
       {/* ✅ BUTTONS */}
       <div
         style={{
