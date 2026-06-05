@@ -18,4 +18,6 @@ export const INITIAL_STATE = {
   expenses: 0,
   investments: 0,
   score: 0,
+  totalIncome: 0,
+  totalExpenses: 0
 };

@@ -282,7 +282,6 @@ export default function DashboardScreen({
                     return {
                       ...prev,
                       balance: prev.balance + diff,
-                      wealth: prev.wealth + diff,
                     };
                   });
 

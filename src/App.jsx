@@ -206,6 +206,9 @@ export default function App() {
     // 1️⃣ Add salary
     updatedState.balance += salaryValue;
 
+    updatedState.totalIncome =
+      (updatedState.totalIncome || 0) + salaryValue;
+
     // 2️⃣ Apply decisions
     let monthlyExpenses = 0;
     Object.values(decisions).forEach(option => {
@@ -257,11 +260,13 @@ export default function App() {
     });
 
     // 3️⃣ Recalculate wealth cleanly
+    updatedState.totalExpenses =
+      (updatedState.totalExpenses || 0) +
+      monthlyExpenses;
+
     updatedState.wealth =
-      (updatedState.balance || 0) +
       (updatedState.savings || 0) +
       (updatedState.investments || 0);
-
     // 4️⃣ Bankruptcy warning
     if (updatedState.balance <= 0) {
       toast.success("⚠️ You are bankrupt! Manage wisely.");
@@ -399,7 +404,9 @@ export default function App() {
             setGameState({
               ...INITIAL_STATE,
               balance: salaryValue,
-              wealth: salaryValue
+              wealth: 0,
+              totalIncome: 0,
+              totalExpenses: 0
             });
 
             setScreen("dashboard");

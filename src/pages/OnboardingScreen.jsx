@@ -109,7 +109,7 @@ export default function OnboardingScreen({
             onClick={handleStart}
             disabled={!userProfile.city || !currentSalary}
           >
-            {"Start Journey"}
+            {"😎 Adulting Starts Now"}
           </button>
 
           <button

@@ -26,9 +26,23 @@ export default function HomeScreen({ onStart, onAbout }) {
         </div>
       </div>
 
-      <div className="action-buttons">
-        <button className="btn-primary" onClick={onStart}>{"Play Game"}</button>
-        <button className="btn-secondary" onClick={onAbout}>{"About Project"}</button>
+      <div className="home-actions">
+
+        <div className="play-cta" onClick={onStart}>
+          <div className="play-cta-icon">🎮</div>
+
+          <div className="play-cta-content">
+            <h2>Survive Your Salary💸</h2>
+            <p>Survive 12 months. Build wealth. Avoid scams.</p>
+          </div>
+
+          <div className="play-cta-arrow">→</div>
+        </div>
+
+        <button className="about-btn" onClick={onAbout}>
+          ℹ️ About Project
+        </button>
+
       </div>
     </div>
   );
