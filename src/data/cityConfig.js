@@ -1,9 +1,9 @@
 export const CITY_CONFIG = {
   Mumbai: {
     rent: {
-      shared: [12000, 18000],
-      pg: [18000, 28000],
-      flat: [35000, 60000],
+      shared: [9000, 15000],
+      pg: [8000, 12000],
+      flat: [22000, 35000]
     },
 
     foodMultiplier: 1.4,
@@ -11,9 +11,9 @@ export const CITY_CONFIG = {
 
   Bengaluru: {
     rent: {
-      shared: [9000, 15000],
-      pg: [14000, 22000],
-      flat: [25000, 45000],
+      shared: [10000, 15000],
+      pg: [9000, 14000],
+      flat: [18000, 30000],
     },
 
     foodMultiplier: 1.2,
@@ -21,8 +21,8 @@ export const CITY_CONFIG = {
 
   Hyderabad: {
     rent: {
-      shared: [7000, 12000],
-      pg: [10000, 18000],
+      shared: [10000, 15000],
+      pg: [7000, 12000],
       flat: [18000, 35000],
     },
 
@@ -31,9 +31,9 @@ export const CITY_CONFIG = {
 
   Pune: {
     rent: {
-      shared: [6000, 10000],
-      pg: [9000, 16000],
-      flat: [16000, 30000],
+      shared: [8000, 12000],
+      pg: [6000, 9000],
+      flat: [15000, 25000],
     },
 
     foodMultiplier: 0.95,
@@ -41,9 +41,9 @@ export const CITY_CONFIG = {
 
   Delhi: {
     rent: {
-      shared: [9000, 16000],
-      pg: [14000, 24000],
-      flat: [28000, 50000],
+      shared: [9000, 14000],
+      pg: [8000, 13000],
+      flat: [15000, 28000],
     },
 
     foodMultiplier: 1.15,

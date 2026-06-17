@@ -48,22 +48,20 @@ export default [
     title: "Food Expenses",
     options: [
       {
-        label: "Cook at Home",
-        baseCost: 6000,
+        label: "Cook at Home / Monthly Mess",
+        baseCost: 5000,
         impact: { stress: -3, creditScore: 3 },
         tags: ["💪 Healthy", "💰 Saves Money"],
       },
       {
         label: "Mixed (Home + Eating Out)",
         baseCost: 8000,
-        extraPercent: 0.05,
         impact: { stress: 0 },
         tags: ["⚖️ Balanced"],
       },
       {
         label: "Daily Zomato/Swiggy",
         baseCost: 12000,
-        extraPercent: 0.08,
         impact: { stress: -5, creditScore: -5 },
         tags: ["⚠️ Expensive", "🍕 Convenient"],
       },
