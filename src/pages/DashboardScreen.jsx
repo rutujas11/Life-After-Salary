@@ -247,7 +247,7 @@ export default function DashboardScreen({
             setShowCityModal(true);
           }}
         >
-          🏙️ Change City
+          🏙️ Moved to another City
         </button>
       </div>
 
@@ -339,17 +339,10 @@ export default function DashboardScreen({
               </select>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "12px",
-                marginTop: "40px",
-                width: "100%",
-              }}
-            >
+            
+            <div className="modal-actions">
               <button
-                className="btn-secondary"
+                className="btn-primary"
                 onClick={() => {
                   if (!tempCity) return;
 
