@@ -12,8 +12,28 @@ export default function Navbar({
   return (
     <div className="navbar">
       {/* Logo / Brand */}
-      <div className="nav-logo" onClick={() => setScreen("home")}>
-        💸 {"Life After Salary"}
+      <div
+        className="nav-logo"
+        onClick={() => setScreen("home")}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          cursor: "pointer",
+        }}
+      >
+        <img
+          src="/app_logo.png"
+          alt="Life After Salary"
+          style={{
+            width: "60px",
+            height: "60px",
+            borderRadius: "10px",
+            objectFit: "cover"
+          }}
+        />
+
+        <span>Life After Salary</span>
       </div>
 
       {/* Tabs */}
