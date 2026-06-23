@@ -18,6 +18,7 @@ export default function DashboardScreen({
   setCurrentSalary,
   setCurrentCity,
   setGameState,
+  setDecisions,
   setScreen,
   onLogout,
   user
@@ -46,6 +47,7 @@ export default function DashboardScreen({
   const [tempSalary, setTempSalary] = useState(currentSalary || 0);
   const [tempCity, setTempCity] = useState(currentCity);
   const [showMenu, setShowMenu] = useState(false);
+  const [showRestartModal, setShowRestartModal] = useState(false);
   
   useEffect(() => {
     setTempSalary(currentSalary || 0);
@@ -201,11 +203,14 @@ export default function DashboardScreen({
               ℹ️ About
             </button>
 
-            <button 
+            <button
               className="drawer-link"
-              onClick={() => setShowMenu(false)}
+              onClick={() => {
+                setShowMenu(false);
+                setShowRestartModal(true);
+              }}
             >
-              🎮 Resume Game
+              🔄 Start New Game
             </button>
 
             <button 
@@ -359,6 +364,50 @@ export default function DashboardScreen({
                 onClick={() => setShowCityModal(false)}
               >
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRestartModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-icon">⚠️</div>
+
+            <h2 className="modal-title">
+              Start New Game?
+            </h2>
+
+            <p className="modal-description">
+              Your current progress will be lost.
+              <br />
+              Are you sure you want to restart from Month 1?
+            </p>
+
+            <div className="modal-actions">
+              <button
+                className="modal-btn modal-btn-secondary"
+                onClick={() => setShowRestartModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="modal-btn modal-btn-primary"
+                onClick={() => {
+                  setShowRestartModal(false);
+
+                  setGameState({
+                    ...INITIAL_STATE,
+                    month: 1,
+                  });
+
+                  setDecisions({});
+                  setScreen("onboarding");
+                }}
+              >
+                🚀 Start Fresh
               </button>
             </div>
           </div>

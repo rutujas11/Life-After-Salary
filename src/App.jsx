@@ -426,6 +426,7 @@ export default function App() {
           setCurrentSalary={setCurrentSalary}
           setCurrentCity={setCurrentCity}
           setGameState={setGameState}
+          setDecisions={setDecisions}
           setScreen={setScreen}
           onLogout={handleLogout}
           user={auth.user}

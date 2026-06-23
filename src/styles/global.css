@@ -527,7 +527,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 20000;
     padding: 20px;
     animation: fadeIn 0.3s;
     backdrop-filter: blur(10px);
@@ -543,6 +543,7 @@ body {
     box-shadow: 0 30px 80px rgba(255, 46, 99, 0.5);
     animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
+    z-index: 20001;
 }
 
 @keyframes slideUp {
