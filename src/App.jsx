@@ -71,68 +71,109 @@ export default function App() {
   }, []);
 
   const handleSignup = async (user) => {
-    localStorage.setItem(
-      "las_session",
-      "1"
-    );
+    try {
+      localStorage.setItem(
+        "las_session",
+        "1"
+      );
 
-    localStorage.setItem(
-      "las_user",
-      JSON.stringify(user)
-    );
+      localStorage.setItem(
+        "las_user",
+        JSON.stringify(user)
+      );
 
-    setAuth({
-      isAuthenticated: true,
-      user,
-    });
+      setAuth({
+        isAuthenticated: true,
+        user,
+      });
 
-    await saveGame(user.email, {
-      gameState: INITIAL_STATE,
-      currentCity: "",
-      currentSalary: 0,
-      history: []
-    });
+      await saveGame(user.email, {
+        gameState: INITIAL_STATE,
+        currentCity: "",
+        currentSalary: 0,
+        history: []
+      });
 
-    setScreen("home");
+      toast.success("🎉 Account Created Successfully");
+
+      setScreen("home");
+
+    } catch (error) {
+
+      console.error("Signup save failed:", error);
+
+      toast.success(
+        "🎉 Account Created Successfully"
+      );
+
+      setScreen("home");
+    }
   };
 
   const handleLogin = async (user) => {
-    localStorage.setItem(
-      "las_session",
-      "1"
-    );
+    try {
+      localStorage.setItem(
+        "las_session",
+        "1"
+      );
 
-    localStorage.setItem(
-      "las_user",
-      JSON.stringify(user)
-    );
+      localStorage.setItem(
+        "las_user",
+        JSON.stringify(user)
+      );
 
-    setAuth({
-      isAuthenticated: true,
-      user,
-    });
+      setAuth({
+        isAuthenticated: true,
+        user,
+      });
 
-    const save = await loadGame(user.email);
-    if (save) {
-      setGameState(
-        save.gameState || INITIAL_STATE
+      const save = await loadGame(user.email);
+
+      if (save) {
+        setGameState(
+          save.gameState || INITIAL_STATE
+        );
+
+        setCurrentCity(
+          save.currentCity || ""
+        );
+
+        setCurrentSalary(
+          save.currentSalary || 0
+        );
+
+        setHistory(
+          save.history || []
+        );
+      }
+
+      toast.success("✅ Login Successful");
+
+      setScreen("home");
+
+    } catch (error) {
+
+      console.error("Login load failed:", error);
+
+      toast.success(
+        "✅ Login Successful"
       );
-      setCurrentCity(
-        save.currentCity || ""
-      );
-      setCurrentSalary(
-        save.currentSalary || 0
-      );
-      setHistory(
-        save.history || []
-      );
+
+      setScreen("home");
     }
-    setScreen("home");
   };
 
   const handleLogout = () => {
     localStorage.removeItem("las_session");
-    setAuth({ isAuthenticated: false, user: null });
+    localStorage.removeItem("las_user");
+
+    setAuth({
+      isAuthenticated: false,
+      user: null
+    });
+
+    toast.success("👋 Logged Out Successfully");
+
     setScreen("home");
   };
   // === END demo auth ===
@@ -341,7 +382,10 @@ export default function App() {
     setDecisions({});
     setShowEvent(false);
     setCurrentEvent(null);
-    setScreen("home");
+    // setScreen("home");
+    setCurrentSalary(0);
+    setCurrentCity("");
+    setScreen("onboarding");
   };
 
   return (

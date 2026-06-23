@@ -367,6 +367,13 @@ Can you survive adulthood better than me? 😅`;
         >
           {"Share Results"} 📤
         </button>
+
+        <button
+          className="btn-secondary"
+          onClick={onReset}
+        >
+          🚀 Play Again
+        </button>
       </div>
     </div>
   );
