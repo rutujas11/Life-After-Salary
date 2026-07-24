@@ -51,19 +51,6 @@ Each city has different:
 
 Players enter their actual monthly salary and experience realistic budgeting decisions.
 
-### 🏠 Custom Living Expenses
-
-Players can optionally enter:
-
-* Monthly Rent
-* Monthly Food Expense
-
-When custom values are provided:
-
-* Default Rent cards are hidden
-* Default Food cards are hidden
-* Real expenses are automatically deducted every month
-
 ### 📈 Financial Metrics
 
 The game tracks:
