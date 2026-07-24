@@ -46,7 +46,7 @@ export default function DashboardScreen({
   const [showCityModal, setShowCityModal] = useState(false);
   const [tempSalary, setTempSalary] = useState(currentSalary || 0);
   const [tempCity, setTempCity] = useState(currentCity);
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   const [showRestartModal, setShowRestartModal] = useState(false);
   
   useEffect(() => {
@@ -148,13 +148,13 @@ export default function DashboardScreen({
   return (
     <div className="screen dashboard">
       
-      <button
+      {/* <button
         className="menu-trigger"
         onClick={() => setShowMenu(true)}
       >
         ☰
-      </button>
-
+      </button> */}
+{/* 
       {showMenu && (
         <>
           <div
@@ -222,7 +222,7 @@ export default function DashboardScreen({
 
           </div>
         </>
-      )}
+      )} */}
 
       {/* ✅ BUTTONS */}
       <div
