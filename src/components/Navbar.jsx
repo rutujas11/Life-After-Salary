@@ -17,29 +17,29 @@ export default function Navbar({
   return (
     <>
       <div className="navbar">
+
+        {/* Mobile Hamburger */}
+        <button
+          className="menu-trigger mobile-only"
+          onClick={() => setShowMenu(true)}
+        >
+          ☰
+        </button>
+        
         {/* Logo */}
         <div
           className="nav-logo"
           onClick={() => setScreen("home")}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            cursor: "pointer",
-          }}
         >
           <img
             src="/app_logo.png"
             alt="Life After Salary"
-            style={{
-              width: "60px",
-              height: "60px",
-              borderRadius: "10px",
-              objectFit: "cover",
-            }}
+            className="nav-logo-img"
           />
 
-          <span>Life After Salary</span>
+          <span className="nav-logo-text">
+            Life After Salary
+          </span>
         </div>
 
         {/* Desktop Navigation */}
@@ -59,10 +59,18 @@ export default function Navbar({
           </button>
 
           <button
-            className={screen === "onboarding" ? "active" : ""}
-            onClick={() => setScreen("onboarding")}
+            className="drawer-link"
+            onClick={() => {
+              if (screen === "dashboard") {
+                setShowMenu(false);
+                return;
+              }
+
+              setScreen(isAuthenticated ? "dashboard" : "onboarding");
+              setShowMenu(false);
+            }}
           >
-            🎮 Play Game
+            🎮 {isAuthenticated ? "Continue Game" : "Play Game"}
           </button>
         </div>
 
@@ -114,13 +122,7 @@ export default function Navbar({
           )}
         </div>
 
-        {/* Mobile Hamburger */}
-        <button
-          className="menu-trigger mobile-only"
-          onClick={() => setShowMenu(true)}
-        >
-          ☰
-        </button>
+        
       </div>
 
       {/* Mobile Drawer */}
@@ -167,7 +169,7 @@ export default function Navbar({
               ℹ️ About
             </button>
 
-            <button
+            {/* <button
               className="drawer-link"
               onClick={() => {
                 setScreen("onboarding");
@@ -175,6 +177,21 @@ export default function Navbar({
               }}
             >
               🎮 Play Game
+            </button> */}
+
+            <button
+              className="drawer-link"
+              onClick={() => {
+                if (screen === "dashboard") {
+                  setShowMenu(false);
+                  return;
+                }
+
+                setScreen(isAuthenticated ? "dashboard" : "onboarding");
+                setShowMenu(false);
+              }}
+            >
+              🎮 {isAuthenticated ? "Continue Game" : "Play Game"}
             </button>
 
             {isAuthenticated && (

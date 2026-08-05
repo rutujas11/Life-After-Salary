@@ -40,7 +40,7 @@ export default function HomeScreen({ onStart, onAbout }) {
         </div>
 
         <button className="about-btn" onClick={onAbout}>
-          ℹ️ About Project
+          ℹ️ About Game
         </button>
 
       </div>

@@ -390,14 +390,15 @@ export default function App() {
 
   return (
     <>
-      {screen !== "dashboard" &&
-        screen !== "summary" && (
+      {screen !== "login" &&
+        screen !== "signup" && (
           <Navbar
             screen={screen}
             setScreen={setScreen}
             isAuthenticated={auth.isAuthenticated}
             user={auth.user}
             onLogout={handleLogout}
+            onReset={resetGame}
           />
         )}
 
