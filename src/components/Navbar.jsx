@@ -169,16 +169,6 @@ export default function Navbar({
               ℹ️ About
             </button>
 
-            {/* <button
-              className="drawer-link"
-              onClick={() => {
-                setScreen("onboarding");
-                setShowMenu(false);
-              }}
-            >
-              🎮 Play Game
-            </button> */}
-
             <button
               className="drawer-link"
               onClick={() => {
