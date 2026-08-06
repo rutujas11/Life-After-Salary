@@ -61,6 +61,16 @@ export default function Navbar({
           <button
             className="drawer-link"
             onClick={() => {
+              onReset();
+              setShowMenu(false);
+            }}
+          >
+            🎮 Play Game
+          </button>
+
+          {/* <button
+            className="drawer-link"
+            onClick={() => {
               if (screen === "dashboard") {
                 setShowMenu(false);
                 return;
@@ -71,7 +81,7 @@ export default function Navbar({
             }}
           >
             🎮 {isAuthenticated ? "Continue Game" : "Play Game"}
-          </button>
+          </button> */}
         </div>
 
         {/* Desktop Auth */}

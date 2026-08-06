@@ -20,8 +20,6 @@ export default function DashboardScreen({
   setGameState,
   setDecisions,
   setScreen,
-  onLogout,
-  user
 }) {
 
   // --- Guard against undefined gameState (prevents crash) ---
@@ -44,7 +42,7 @@ export default function DashboardScreen({
 
   const [showSalaryModal, setShowSalaryModal] = useState(false);
   const [showCityModal, setShowCityModal] = useState(false);
-  const [tempSalary, setTempSalary] = useState(currentSalary || 0);
+  const [tempSalary, setTempSalary] = useState(currentSalary ? String(currentSalary) : "");
   const [tempCity, setTempCity] = useState(currentCity);
   // const [showMenu, setShowMenu] = useState(false);
   const [showRestartModal, setShowRestartModal] = useState(false);
@@ -190,7 +188,7 @@ export default function DashboardScreen({
               type="number"
               className="salary-input"
               value={tempSalary}
-              onChange={(e) => setTempSalary(Number(e.target.value))}
+              onChange={(e) => setTempSalary(e.target.value)}
               placeholder="Enter salary"
             />
 
