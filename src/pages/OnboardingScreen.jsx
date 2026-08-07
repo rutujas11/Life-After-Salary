@@ -1,4 +1,6 @@
 import { toast } from "react-hot-toast";
+import { useRef } from "react";
+
 const CITY_OPTIONS = [
   { id: "mumbai",    label: "Mumbai",    icon: "🌆" },
   { id: "pune",      label: "Pune",      icon: "🏙️" },
@@ -27,6 +29,9 @@ export default function OnboardingScreen({
     // Advance to dashboard
     onComplete?.();
   };
+
+  const salaryRef = useRef(null);
+  const cityRef = useRef(null);
 
   return (
     <div className="screen">
@@ -83,23 +88,25 @@ export default function OnboardingScreen({
         </div>
 
         {/* SALARY */}
-        <div className="form-group">
-          <label className="form-label">{"Enter your monthly salary"}</label>
-
-          <input
-            type="number"
-            className="salary-input"
-            placeholder="e.g. 40000"
-            value={currentSalary || ""}
-            min="10000"
-            max="500000"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value < 0) return; // prevent negative
-              setCurrentSalary(value);
-            }}
-          />
-        </div>
+        <input
+          ref={salaryRef}
+          type="number"
+          className="salary-input"
+          placeholder="e.g. 40000"
+          value={currentSalary || ""}
+          autoFocus
+          enterKeyHint="done"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleStart(e);
+            }
+          }}
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (value < 0) return;
+            setCurrentSalary(value);
+          }}
+        />
 
         {/* ACTIONS */}
         <div className="action-buttons">
