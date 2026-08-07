@@ -88,25 +88,29 @@ export default function OnboardingScreen({
         </div>
 
         {/* SALARY */}
-        <input
-          ref={salaryRef}
-          type="number"
-          className="salary-input"
-          placeholder="e.g. 40000"
-          value={currentSalary || ""}
-          autoFocus
-          enterKeyHint="done"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleStart(e);
-            }
-          }}
-          onChange={(e) => {
-            const value = Number(e.target.value);
-            if (value < 0) return;
-            setCurrentSalary(value);
-          }}
-        />
+        <div className="form-group">
+          <label className="form-label">{"Enter your monthly salary"}</label>
+          <input
+            ref={salaryRef}
+            type="number"
+            className="salary-input"
+            placeholder="e.g. 40000"
+            value={currentSalary || ""}
+            autoFocus
+            enterKeyHint="done"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleStart(e);
+              }
+            }}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              if (value < 0) return;
+              setCurrentSalary(value);
+            }}
+          />
+          
+        </div>
 
         {/* ACTIONS */}
         <div className="action-buttons">
