@@ -96,7 +96,6 @@ export default function OnboardingScreen({
             className="salary-input"
             placeholder="e.g. 40000"
             value={currentSalary || ""}
-            autoFocus
             enterKeyHint="done"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
