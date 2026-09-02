@@ -3,10 +3,9 @@ import { useState } from "react";
 import DECISIONS from "../data/decisions";
 import MetricCard from "../components/MetricCard";
 import DecisionCard from "../components/DecisionCard";
-import { CITY_CONFIG } from "../data/cityConfig";
 import { INITIAL_STATE } from "../data/constants";
 import { toast } from "react-hot-toast";
-
+import { calculateOptionCost } from "../utils/calculateCost";
 
 export default function DashboardScreen({
   gameState,
@@ -60,70 +59,19 @@ export default function DashboardScreen({
 
   const totalMonthlyExpenses = Object.entries(decisions || {}).reduce(
     (sum, [decisionId, option]) => {
-
       if (!option) return sum;
 
-      let cost = 0;
-
-      const cityData =
-        CITY_CONFIG[currentCity] || CITY_CONFIG.Pune;
-
-      // RENT
-      if (decisionId === "rent") {
-
-        if (option.label === "Shared Apartment") {
-          const [min, max] = cityData.rent.shared;
-          cost = Math.round((min + max) / 2);
-        }
-
-        else if (option.label === "PG Accommodation") {
-          const [min, max] = cityData.rent.pg;
-          cost = Math.round((min + max) / 2);
-        }
-
-        else if (option.label === "1/2 BHK Flat") {
-          const [min, max] = cityData.rent.flat;
-          cost = Math.round((min + max) / 2);
-        }
-      }
-
-      // FOOD
-      else if (decisionId === "food") {
-
-        cost +=
-          (option.baseCost || 0) *
-          (cityData.foodMultiplier || 1);
-
-        if (option.extraPercent) {
-          cost += Math.round(
-            currentSalary * option.extraPercent
-          );
-        }
-      }
-
-      // OTHER
-      else {
-
-        if (option.baseCost) {
-          cost += option.baseCost;
-        }
-
-        if (option.extraPercent) {
-          cost += Math.round(
-            currentSalary * option.extraPercent
-          );
-        }
-
-        if (option.costPercent) {
-          cost += Math.round(
-            currentSalary * option.costPercent
-          );
-        }
-      }
-
-      return sum + Math.round(cost);
-
-    }, 0
+      return (
+        sum +
+        calculateOptionCost(
+          option,
+          decisionId,
+          currentSalary,
+          currentCity
+        )
+      );
+    },
+    0
   );
 
   const remainingSalary =

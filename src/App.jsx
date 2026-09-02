@@ -252,16 +252,11 @@ export default function App() {
 
     // 2️⃣ Apply decisions
     let monthlyExpenses = 0;
-    Object.values(decisions).forEach(option => {
+
+    Object.entries(decisions).forEach(([decisionId, option]) => {
       if (!option) return;
 
-      let totalCost = 0;
-
-      const decisionId = Object.keys(decisions).find(
-        key => decisions[key] === option
-      );
-
-      totalCost = calculateOptionCost(
+      const totalCost = calculateOptionCost(
         option,
         decisionId,
         salaryValue,
@@ -269,14 +264,11 @@ export default function App() {
       );
 
       monthlyExpenses += totalCost;
-      totalCost = Math.round(totalCost);
 
-      // Deduct total cost
       if (totalCost > 0) {
         updatedState.balance -= totalCost;
       }
 
-      // 📈 Apply stress / credit changes
       Object.entries(option.impact || {}).forEach(([key, value]) => {
         updatedState[key] = Math.max(
           0,
@@ -284,7 +276,6 @@ export default function App() {
         );
       });
 
-      // 💹 Investment handling
       if (option.investmentPercent) {
         const investAmount = Math.round(
           salaryValue * option.investmentPercent
@@ -293,7 +284,6 @@ export default function App() {
         updatedState.investments =
           (updatedState.investments || 0) + investAmount;
 
-        // 5% growth
         updatedState.wealth =
           (updatedState.wealth || 0) +
           Math.round(investAmount * 1.05);
